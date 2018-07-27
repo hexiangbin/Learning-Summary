@@ -28,24 +28,24 @@
 
 2.尽量减少操作次数。
 
-```java
-class Solution {
-    public static void moveZeroes(int[] nums) {
-        int p=0;
-        for(int i=0;i<nums.length;i++){
-            if(nums[i]==0)continue;
-            swap(nums,p++,i);
-        }
-    }
-    public  static void swap(int[] nums,int i,int j){
-        int temp;
-        temp=nums[i];
-        nums[i]=nums[j];
-        nums[j]=temp;
-    }
 
-}
-```
+      class Solution {
+          public static void moveZeroes(int[] nums) {
+              int p=0;
+              for(int i=0;i<nums.length;i++){
+                  if(nums[i]==0)continue;
+                  swap(nums,p++,i);
+              }
+          }
+          public  static void swap(int[] nums,int i,int j){
+              int temp;
+              temp=nums[i];
+              nums[i]=nums[j];
+              nums[j]=temp;
+          }
+
+      }
+
 
 [26. 删除排序数组中的重复项](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/description/)
 
@@ -71,41 +71,19 @@ class Solution {
 
 你不需要考虑数组中超出新长度后面的元素。
 
-说明:
-
-为什么返回数值是整数，但输出的答案是数组呢?
-
-请注意，输入数组是以“引用”方式传递的，这意味着在函数里修改输入数组对于调用者是可见的。
-
-你可以想象内部操作如下:
-
-// nums 是以“引用”方式传递的。也就是说，不对实参做任何拷贝
-
-int len = removeDuplicates(nums);
-
-// 在函数里修改输入数组对于调用者是可见的。
-
-// 根据你的函数返回的长度, 它会打印出数组中该长度范围内的所有元素。
-
-for (int i = 0; i < len; i++) {
-
-    print(nums[i]);
-    
-}
-
-   class Solution {
-    public int removeDuplicates(int[] nums) {
-        if(nums.length<=1)
-            return nums.length;
-        int len=0;
-        for(int i=0;i<nums.length;i++){
-            if(i+1<nums.length&&nums[i]!=nums[i+1]){
-                //与后一个数字不相等
-                nums[len++]=nums[i];
-            }
-        }
-        //还剩最后一个元素没有判断，不管什么情况下（与前一个元素相等或者不等），最后一个元素肯定在新的数组里面
-        nums[len++]=nums[nums.length-1];
-        return len;
-    }
-}
+      class Solution {
+       public int removeDuplicates(int[] nums) {
+           if(nums.length<=1)
+               return nums.length;
+           int len=0;
+           for(int i=0;i<nums.length;i++){
+               if(i+1<nums.length&&nums[i]!=nums[i+1]){
+                   //与后一个数字不相等
+                   nums[len++]=nums[i];
+               }
+           }
+           //还剩最后一个元素没有判断，不管什么情况下（与前一个元素相等或者不等），最后一个元素肯定在新的数组里面
+           nums[len++]=nums[nums.length-1];
+           return len;
+       }
+   }
