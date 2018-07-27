@@ -349,3 +349,381 @@ public class Solution {
     }
 }
 ```
+# 15-反转链表
+
+[NowCoder](https://www.nowcoder.com/practice/75e878df47f24fdc9dc3e400ec6058ca?tpId=13&tqId=11168&tPage=1&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入一个链表，反转链表后，输出新链表的表头。
+```java
+public class Solution {
+    public ListNode ReverseList(ListNode head) {
+		if(head==null||head.next==null) return head;
+        ListNode rehead=ReverseList(head.next);
+        head.next.next=head;
+        head.next=null;
+        return rehead;
+    }
+}
+```
+# 16-合并两个排序的链表
+
+[NowCoder](https://www.nowcoder.com/practice/d8b6b4358f774294a89de2a6ac4d9337?tpId=13&tqId=11169&tPage=1&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。
+```java
+public class Solution {
+    public ListNode Merge(ListNode list1,ListNode list2) {
+        if(list1==null) return list2;
+        if(list2==null) return list1;
+        if(list1.val<list2.val){
+            list1.next=Merge(list1.next,list2);
+            return list1;
+        }else{
+            list2.next=Merge(list1,list2.next);
+            return list2;
+        }
+    }
+}
+```
+# 17-合并两个排序的链表
+
+[NowCoder](https://www.nowcoder.com/practice/6e196c44c7004d15b1610b9afca8bd88?tpId=13&tqId=11170&tPage=1&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）
+```java
+public class Solution {
+    public boolean HasSubtree(TreeNode root1,TreeNode root2){
+		 boolean flag=false;
+		//当Tree1和Tree2都不为零的时候，才进行比较。否则直接返回false
+		 if(root1!=null && root2!=null){
+			//如果找到了对应Tree2的根节点的点
+			 if(root1.val==root2.val){
+				//以这个根节点为为起点判断是否包含Tree2
+				flag=check(root1,root2); 
+			 }
+			//如果找不到，那么就再去root的左儿子当作起点
+			 if(!flag)flag=HasSubtree(root1.left, root2);
+			//如果还找不到，那么就再去root的右儿子当作起点
+			 if(!flag)flag=HasSubtree(root1.right, root2);
+		 }
+		 return flag;
+	 }
+	 public boolean check(TreeNode node1,TreeNode node2){
+		 //如果Tree2已经遍历完了都能对应的上，返回true
+		 if(node2==null)return true;
+		 //如果Tree2还没有遍历完，Tree1却遍历完了。返回false
+		 if(node1==null)return false;
+		 //如果其中有一个点没有对应上，返回false
+		 if(node1.val!=node2.val)return false;
+		 //如果根节点对应的上，那么就分别去子节点里面匹配
+		 return check(node1.left,node2.left)&&check(node1.right,node2.right);
+	 }
+}
+```
+# 18-二叉树的镜像
+
+[NowCoder](https://www.nowcoder.com/practice/564f4c26aa584921bc75623e48ca3011?tpId=13&tqId=11171&tPage=1&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+操作给定的二叉树，将其变换为源二叉树的镜像。
+
+输入描述:二叉树的镜像定义：源二叉树 
+
+    	    8
+    	   /  \
+    	  6   10
+    	 / \  / \
+    	5  7 9 11
+    	镜像二叉树
+    	    8
+    	   /  \
+    	  10   6
+    	 / \  / \
+    	11 9 7  5
+```java
+public class Solution {
+    public void Mirror(TreeNode root) {
+        if(root==null)return;
+		if(root.left==null && root.right==null)return;
+		TreeNode temp;
+		temp=root.left;
+		root.left=root.right;
+		root.right=temp;
+		if(root.left!=null)Mirror(root.left);
+		if(root.right!=null)Mirror(root.right);
+    }
+}
+```
+# 18-顺时针打印矩阵
+
+[NowCoder](https://www.nowcoder.com/practice/9b4c81a02cd34f76be2659fa0d54342a?tpId=13&tqId=11172&tPage=1&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字，例如，如果输入如下4 X 4矩阵： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 则依次打印出数字1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10.
+```java
+public class Solution {
+    public ArrayList<Integer> printMatrix(int [][] matrix){
+		int rows=matrix.length;
+		int cols=matrix[0].length;
+		if(rows==0 || cols==0)return null;
+		ArrayList<Integer> res=new ArrayList<Integer>();
+		int start=0;
+		while(rows>2*start&& cols>2*start){
+			int endX=cols-start-1;
+			int endY=rows-start-1;
+			 //从左到右打印一行
+			for(int i=start;i<=endX;i++){
+				res.add(matrix[start][i]);
+			}
+			//从上到下打印一行
+			if(start<endY){
+				for(int i=start+1;i<=endY;i++){
+					res.add(matrix[i][endX]);
+				}
+			}
+			//从右到左打印一行
+			if (start < endX && start < endY) {
+				for (int i=endX-1; i>=start; i--) {
+					res.add(matrix[endY][i]);
+				}
+			}
+		    //从下到上打印一行
+			if (start<endX && start<endY-1) {
+				for (int i=endY-1; i>=start+1; i--) {
+				     res.add(matrix[i][start]);
+				}
+			}
+			start++;
+		}
+		return res;
+	}
+}
+```
+# 19-包含min函数的栈
+
+[NowCoder](https://www.nowcoder.com/practice/4c776177d2c04c2494f2555c9fcc1e49?tpId=13&tqId=11173&tPage=1&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+定义栈的数据结构，请在该类型中实现一个能够得到栈中所含最小元素的min函数（时间复杂度应为O（1））。
+```java
+import java.util.Stack;
+
+public class Solution {
+	private static Stack<Integer> stack=new Stack<>();
+	private static Stack<Integer> minStack=new Stack<>();
+	
+	public static void push(Integer i){
+		stack.push(i);
+		if(minStack.size()==0 || i<minStack.peek()){
+			minStack.push(i);
+		}else{
+			minStack.push(minStack.peek());
+		}
+	}
+	
+	public static void pop(){
+		if(stack.size()>0 && minStack.size()>0){
+			stack.pop();
+			minStack.pop();
+		}else{
+			return;
+		}
+	}
+	
+	public static Integer min(){
+		if(stack.size()>0 && minStack.size()>0){
+			return minStack.peek();
+		}else{
+			return null;
+		}
+	}
+}
+```
+# 20-包含min函数的栈
+
+[NowCoder](https://www.nowcoder.com/practice/d77d11405cc7470d82554cb392585106?tpId=13&tqId=11174&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否可能为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4,5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）
+```java
+public class Solution {
+	public boolean IsPopOrder(int [] pushA,int [] popA){
+		if(pushA.length==0 || popA.length==0 ||pushA.length!=popA.length)return false;
+		Stack<Integer> stack=new Stack<Integer>();
+		int index=0;
+		for(int i=0;i<pushA.length;i++){
+			stack.push(pushA[i]);
+			while(!stack.isEmpty()&&stack.peek()==popA[index]){
+				stack.pop();
+				index++;
+			}
+		}
+		return stack.isEmpty();
+	}
+}
+```
+# 21-栈的压入、弹出序列
+
+[NowCoder](https://www.nowcoder.com/practice/d77d11405cc7470d82554cb392585106?tpId=13&tqId=11174&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否可能为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4,5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）
+```java
+public class Solution {
+	public boolean IsPopOrder(int [] pushA,int [] popA){
+		if(pushA.length==0 || popA.length==0 ||pushA.length!=popA.length)return false;
+		Stack<Integer> stack=new Stack<Integer>();
+		int index=0;
+		for(int i=0;i<pushA.length;i++){
+			stack.push(pushA[i]);
+			while(!stack.isEmpty()&&stack.peek()==popA[index]){
+				stack.pop();
+				index++;
+			}
+		}
+		return stack.isEmpty();
+	}
+}
+```
+# 22-从上往下打印二叉树
+
+[NowCoder](https://www.nowcoder.com/practice/7fe2212963db4790b57431d9ed259701?tpId=13&tqId=11175&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+从上往下打印出二叉树的每个节点，同层节点从左至右打印。
+```java
+public class Solution {
+    public ArrayList<Integer> PrintFromTopToBottom(TreeNode root){
+		ArrayList<Integer> list=new ArrayList<Integer>();
+        if(root==null)return list;
+		Queue<TreeNode> queue=new LinkedList<TreeNode>();
+		queue.offer(root);
+		while(!queue.isEmpty()){
+			TreeNode node=queue.poll();
+			if(node.left!=null)queue.offer(node.left);
+			if(node.right!=null)queue.offer(node.right);
+			list.add(node.val);
+		}
+		return list;
+	}
+}
+```
+# 23-二叉搜索树的后序遍历序列
+
+[NowCoder](https://www.nowcoder.com/practice/a861533d45854474ac791d90e447bafd?tpId=13&tqId=11176&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
+```java
+public class Solution {
+	public static boolean VerifySquenceOfBST(int [] sequence){
+		if(sequence.length==0)return false;
+		int length=sequence.length;
+		int root=sequence[length-1];
+		int i=0;
+		for(;i<length-1;i++){
+			if(sequence[i]>root){
+				break;
+			}
+		}
+		int j=i;
+		for(;j<length-1;j++){
+			if(sequence[j]<root)return false;
+		}
+		boolean left=true;
+		if(i>0){
+			int[] leftTree=Arrays.copyOfRange(sequence, 0,i);//前闭后开
+			left=VerifySquenceOfBST(leftTree);
+		}
+		boolean right=true;
+		if(i<length-1){
+			int[] rightTree=Arrays.copyOfRange(sequence,i,length-1);
+			right=VerifySquenceOfBST(rightTree);
+		}
+		return left&&right;
+	}
+}
+```
+# 24-二叉树中和为某一值的路径
+
+[NowCoder](https://www.nowcoder.com/practice/b736e784e3e34731af99065031301bca?tpId=13&tqId=11177&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入一颗二叉树的跟节点和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。(注意: 在返回值的list中，数组长度大的数组靠前)
+```java
+public class Solution {
+    public ArrayList<ArrayList<Integer>> FindPath(TreeNode root,int target){
+		ArrayList<ArrayList<Integer>> paths=new ArrayList<ArrayList<Integer>>();
+		ArrayList<Integer> path=new ArrayList<Integer>();
+		if(root==null)return paths;
+		FindPath(paths,path,root,target);
+		return paths;
+	}
+	public void FindPath(ArrayList<ArrayList<Integer>> paths,ArrayList<Integer> path,TreeNode root,int target){
+		path.add(root.val);
+		if(root.left==null && root.right==null&&target==root.val){
+			paths.add(path);
+			return;
+		}
+		ArrayList<Integer> path2=new ArrayList<Integer>();
+		path2.addAll(path);
+		if(root.left!=null)FindPath(paths, path, root.left, target-root.val);
+		if(root.right!=null)FindPath(paths, path2, root.right, target-root.val);
+		
+	}
+}
+```
+# 25-复杂链表的复制
+
+[NowCoder](https://www.nowcoder.com/practice/f836b2c43afc4b35ad6adc41ec941dba?tpId=13&tqId=11178&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针指向任意一个节点），返回结果为复制后复杂链表的head。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）
+<div align="center"> <img src="../pictures/961875_1469289666488_886555C4C4726220976FEF4D3A32FFCD.png"/> </div><br>
+
+```java
+/*
+*解题思路：
+*1、遍历链表，复制每个结点，如复制结点A得到A1，将结点A1插到结点A后面；
+*2、重新遍历链表，复制老结点的随机指针给新结点，如A1.random = A.random.next;
+*3、拆分链表，将链表拆分为原链表和复制后的链表
+*/
+public class Solution {
+    public RandomListNode Clone(RandomListNode pHead) {
+        if(pHead == null) {
+            return null;
+        }
+        RandomListNode currentNode = pHead;
+        //1、复制每个结点，如复制结点A得到A1，将结点A1插到结点A后面；
+        while(currentNode != null){
+            RandomListNode cloneNode = new RandomListNode(currentNode.label);
+            RandomListNode nextNode = currentNode.next;
+            currentNode.next = cloneNode;
+            cloneNode.next = nextNode;
+            currentNode = nextNode;
+        }
+         
+        currentNode = pHead;
+        //2、重新遍历链表，复制老结点的随机指针给新结点，如A1.random = A.random.next;
+        while(currentNode != null) {
+            currentNode.next.random = currentNode.random==null?null:currentNode.random.next;
+            currentNode = currentNode.next.next;
+        }
+         
+        //3、拆分链表，将链表拆分为原链表和复制后的链表
+        currentNode = pHead;
+        RandomListNode pCloneHead = pHead.next;
+        while(currentNode != null) {
+            RandomListNode cloneNode = currentNode.next;
+            currentNode.next = cloneNode.next;
+            cloneNode.next = cloneNode.next==null?null:cloneNode.next.next;
+            currentNode = currentNode.next;
+        }
+         
+        return pCloneHead;
+    }
+}
+```
