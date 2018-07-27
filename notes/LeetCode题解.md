@@ -1,7 +1,7 @@
 * [数据结构相关问题](#数据结构相关问题)
-    * [数组](#数组)
+    * [数组与字符串](#数组与字符串)
     * [队列](#)
-    * [字符串](#)
+    * [二叉树](#)
     * [查找表](#)
     * [链表](#)
 
@@ -9,7 +9,7 @@
 
 ## 数据结构相关问题 ##
 
-### 数组 ###
+### 数组与字符串 ###
 
 [283. 移动零](https://leetcode-cn.com/problems/move-zeroes/description/)
 
@@ -275,6 +275,54 @@ class Solution {
             }
         }
         throw new IllegalStateException("no answer");
+    }
+}
+```
+[125. 验证回文串](https://leetcode-cn.com/problems/valid-palindrome/description/)
+
+题目描述：
+
+给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。
+
+说明：本题中，我们将空字符串定义为有效的回文串。
+
+示例 1:
+
+输入: "A man, a plan, a canal: Panama"
+
+输出: true
+
+示例 2:
+
+输入: "race a car"
+
+输出: false
+```java
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+class Solution {
+   public boolean isPalindrome(String s) {
+        if(s.isEmpty())
+            return true;
+       //将字符串进行匹配，保留数字和字母
+        String regEx="[^A-Za-z0-9]";
+        Pattern p=Pattern.compile(regEx);
+        Matcher m=p.matcher(s);
+        String input=m.replaceAll("").trim().toLowerCase();
+       //转化成char数组
+        char[] arr=input.toCharArray();
+        if(arr.length==1)
+            return true;
+       //对撞指针
+        int left=0,right=arr.length-1;
+        while(left<right){
+            if(arr[left]!=arr[right])
+                return false;
+            left++;
+            right--;
+        }
+        return true;
     }
 }
 ```
