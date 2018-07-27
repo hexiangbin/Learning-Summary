@@ -35,6 +35,14 @@
 
 依照原书第二版顺序。
 
+> [排序算法](https://github.com/hexiangbin/Learning-Summary/blob/master/notes/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95.md)
+
+排序算法总结
+
+> [链表算法](https://github.com/hexiangbin/Learning-Summary/blob/master/notes/%E9%93%BE%E8%A1%A8%E7%AE%97%E6%B3%95.md)
+
+链表算法总结
+
 
 
 [我的github地址](https://github.com/hexiangbin/algorithm)
