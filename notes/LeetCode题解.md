@@ -70,24 +70,24 @@ class Solution {
 函数应该返回新的长度 5, 并且原数组 nums 的前五个元素被修改为 0, 1, 2, 3, 4。
 
 你不需要考虑数组中超出新长度后面的元素。
-
-      class Solution {
-          public int removeDuplicates(int[] nums) {
-              if(nums.length<=1)
-                  return nums.length;
-              int len=0;
-              for(int i=0;i<nums.length;i++){
-                  if(i+1<nums.length&&nums[i]!=nums[i+1]){
-                      //与后一个数字不相等
-                      nums[len++]=nums[i];
-                  }
-              }
-              //还剩最后一个元素没有判断，不管什么情况下（与前一个元素相等或者不等），最后一个元素肯定在新的数组里面
-              nums[len++]=nums[nums.length-1];
-              return len;
-          }
-      }
-      
+```java
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        if(nums.length<=1)
+            return nums.length;
+        int len=0;
+        for(int i=0;i<nums.length;i++){
+            if(i+1<nums.length&&nums[i]!=nums[i+1]){
+                //与后一个数字不相等
+                nums[len++]=nums[i];
+            }
+        }
+        //还剩最后一个元素没有判断，不管什么情况下（与前一个元素相等或者不等），最后一个元素肯定在新的数组里面
+        nums[len++]=nums[nums.length-1];
+        return len;
+    }
+}
+```      
 [27. 移除元素](https://leetcode-cn.com/problems/remove-element/description/)
 
 题目描述：
@@ -115,15 +115,16 @@ class Solution {
 注意这五个元素可为任意顺序。
 
 你不需要考虑数组中超出新长度后面的元素。
-
-      class Solution {
-          public int removeElement(int[] nums, int val) {
-              int len=0;
-              for(int i=0;i<nums.length;i++){
-                  if(nums[i]!=val){
-                      nums[len++]=nums[i];
-                  }
-              }
-              return len;
-          }
-      }
+```java
+class Solution {
+    public int removeElement(int[] nums, int val) {
+        int len=0;
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]!=val){
+                nums[len++]=nums[i];
+            }
+        }
+        return len;
+    }
+}
+```
