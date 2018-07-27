@@ -234,3 +234,115 @@ class Solution {
     }
 }
 ```
+[344. 反转字符串](https://leetcode-cn.com/problems/reverse-string/description/)
+
+题目描述：请编写一个函数，其功能是将输入的字符串反转过来。
+
+示例：输入：s = "hello",返回："olleh"
+```java
+class Solution {
+    public String reverseString(String s) {
+        char[] arr=s.toCharArray();
+        int left=0,right=arr.length-1;
+        while(left<right){
+            swap(arr,left,right);
+            left++;
+            right--;
+        }
+        return String.valueOf(arr);
+    }
+    public void swap(char[] arr,int left,int right){
+        char temp;
+        temp=arr[left];
+        arr[left]=arr[right];
+        arr[right]=temp;
+    }
+}
+```
+[11. 盛最多水的容器](https://leetcode-cn.com/problems/container-with-most-water/description/)
+
+题目描述：给定 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+
+说明：你不能倾斜容器，且 n 的值至少为 2。
+<div align="center"> <img src="../pictures/question_11.jpg"/> </div><br>
+图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。
+
+示例:输入: [1,8,6,2,5,4,8,3,7] 输出: 49
+```java
+class Solution {
+    /*
+    最初我们考虑由最外围两条线段构成的区域。现在，为了使面积最大化，
+    我们需要考虑更长的两条线段之间的区域。如果我们试图将指向较长线段的指针向内侧移动，
+    矩形区域的面积将受限于较短的线段而不会获得任何增加。
+    但是，在同样的条件下，移动指向较短线段的指针尽管造成了矩形宽度的减小，但却可能会有助于面积的增大。
+    因为移动较短线段的指针会得到一条相对较长的线段，这可以克服由宽度减小而引起的面积减小
+     */
+    public int maxArea(int[] height) {
+        int left=0,right=height.length-1;
+        int maxArea=0;
+        while(left<right){
+            maxArea=Math.max(maxArea,(right-left)*Math.min(height[left],height[right]));
+            if(height[left]<height[right]){
+                left++;
+            }else {
+                right--;
+            }
+        }
+        return maxArea;
+    }
+}
+```
+[209. 长度最小的子数组](https://leetcode-cn.com/problems/minimum-size-subarray-sum/description/)
+
+题目描述：给定一个含有 n 个正整数的数组和一个正整数 s ，找出该数组中满足其和 ≥ s 的长度最小的连续子数组。如果不存在符合条件的连续子数组，返回 0。
+
+示例: 输入: s = 7, nums = [2,3,1,2,4,3] 输出: 2,解释: 子数组 [4,3] 是该条件下的长度最小的连续子数组。
+```java
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        assert (s>0 && nums!=null);
+        //滑动窗口
+        int left=0,right=-1;//nums[left....right]为滑动窗口
+        int sum=0;
+        int len=nums.length+1;
+        while(left<nums.length){
+            if(right+1<nums.length && sum<s)
+                sum+=nums[++right];
+            else //sum>=s
+                sum-=nums[left++];
+            
+            if(sum>=s)
+                len=Math.min(len,right-left+1);
+        }
+        if(len==nums.length+1)//无解
+            return 0;
+        return len;
+    }
+}
+```
+[3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/description/)
+
+题目描述：给定一个字符串，找出不含有重复字符的最长子串的长度。
+
+示例：给定 "abcabcbb" ，没有重复字符的最长子串是 "abc" ，那么长度就是3。
+
+给定 "bbbbb" ，最长的子串就是 "b" ，长度是1。
+
+给定 "pwwkew" ，最长子串是 "wke" ，长度是3。请注意答案必须是一个子串，"pwke" 是 子序列  而不是子串。
+```java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int[] fre=new int[256];//记录窗口中出现的字符
+        int left=0,right=-1;//滑动窗口
+        int len=0;
+        while(left<s.length()){
+            if(right+1<s.length() && fre[s.charAt(right+1)]==0)
+                fre[s.charAt(++right)]++;
+            else
+                fre[s.charAt(left++)]--;
+            len=Math.max(len,right-left+1);
+        }
+        return len;
+    }
+}
+```
