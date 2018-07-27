@@ -28,24 +28,24 @@
 
 2.尽量减少操作次数。
 
+```java
+class Solution {
+    public static void moveZeroes(int[] nums) {
+        int p=0;
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]==0)continue;
+            swap(nums,p++,i);
+        }
+    }
+    public  static void swap(int[] nums,int i,int j){
+        int temp;
+        temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
 
-      class Solution {
-          public static void moveZeroes(int[] nums) {
-              int p=0;
-              for(int i=0;i<nums.length;i++){
-                  if(nums[i]==0)continue;
-                  swap(nums,p++,i);
-              }
-          }
-          public  static void swap(int[] nums,int i,int j){
-              int temp;
-              temp=nums[i];
-              nums[i]=nums[j];
-              nums[j]=temp;
-          }
-
-      }
-
+}
+```
 
 [26. 删除排序数组中的重复项](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/description/)
 
