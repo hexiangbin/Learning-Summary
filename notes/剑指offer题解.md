@@ -12,8 +12,17 @@
 * [12.数值的整数次方](#12-数值的整数次方)
 * [13.调整数组顺序使奇数位于偶数前面](#13-调整数组顺序使奇数位于偶数前面)
 * [14.链表中倒数第k个结点](#14-链表中倒数第k个结点)
-* [6.旋转数组的最小数字](#6-旋转数组的最小数字)
-* [6.旋转数组的最小数字](#6-旋转数组的最小数字)
+* [15.反转链表](#15-反转链表)
+* [16.合并两个排序的链表](#16-合并两个排序的链表)
+* [17.树的子结构](#17-树的子结构)
+* [18.二叉树的镜像](#18-二叉树的镜像)
+* [19.包含min函数的栈](#19-包含min函数的栈)
+* [20.栈的压入、弹出序列](#20-栈的压入、弹出序列)
+* [21.从上往下打印二叉树](#21-从上往下打印二叉树)
+* [22.二叉搜索树的后序遍历序列](#22-二叉搜索树的后序遍历序列)
+* [23.二叉树中和为某一值的路径](#23-二叉树中和为某一值的路径)
+* [24.复杂链表的复制](#24-复杂链表的复制)
+* [25.合并两个排序的链表](#25-合并两个排序的链表)
 * 题号顺序参照牛客网OJ顺序
 
 # 1-二维数组中的查找
@@ -387,7 +396,7 @@ public class Solution {
     }
 }
 ```
-# 17-合并两个排序的链表
+# 17-树的子结构
 
 [NowCoder](https://www.nowcoder.com/practice/6e196c44c7004d15b1610b9afca8bd88?tpId=13&tqId=11170&tPage=1&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
 
@@ -542,7 +551,8 @@ public class Solution {
 	}
 }
 ```
-# 20-包含min函数的栈
+
+# 20-栈的压入、弹出序列
 
 [NowCoder](https://www.nowcoder.com/practice/d77d11405cc7470d82554cb392585106?tpId=13&tqId=11174&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
 
@@ -565,30 +575,7 @@ public class Solution {
 	}
 }
 ```
-# 21-栈的压入、弹出序列
-
-[NowCoder](https://www.nowcoder.com/practice/d77d11405cc7470d82554cb392585106?tpId=13&tqId=11174&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
-
-## 题目描述
-输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否可能为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4,5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）
-```java
-public class Solution {
-	public boolean IsPopOrder(int [] pushA,int [] popA){
-		if(pushA.length==0 || popA.length==0 ||pushA.length!=popA.length)return false;
-		Stack<Integer> stack=new Stack<Integer>();
-		int index=0;
-		for(int i=0;i<pushA.length;i++){
-			stack.push(pushA[i]);
-			while(!stack.isEmpty()&&stack.peek()==popA[index]){
-				stack.pop();
-				index++;
-			}
-		}
-		return stack.isEmpty();
-	}
-}
-```
-# 22-从上往下打印二叉树
+# 21-从上往下打印二叉树
 
 [NowCoder](https://www.nowcoder.com/practice/7fe2212963db4790b57431d9ed259701?tpId=13&tqId=11175&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
 
@@ -611,7 +598,7 @@ public class Solution {
 	}
 }
 ```
-# 23-二叉搜索树的后序遍历序列
+# 22-二叉搜索树的后序遍历序列
 
 [NowCoder](https://www.nowcoder.com/practice/a861533d45854474ac791d90e447bafd?tpId=13&tqId=11176&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
 
@@ -647,7 +634,7 @@ public class Solution {
 	}
 }
 ```
-# 24-二叉树中和为某一值的路径
+# 23-二叉树中和为某一值的路径
 
 [NowCoder](https://www.nowcoder.com/practice/b736e784e3e34731af99065031301bca?tpId=13&tqId=11177&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
 
@@ -676,7 +663,7 @@ public class Solution {
 	}
 }
 ```
-# 25-复杂链表的复制
+# 24-复杂链表的复制
 
 [NowCoder](https://www.nowcoder.com/practice/f836b2c43afc4b35ad6adc41ec941dba?tpId=13&tqId=11178&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
 
