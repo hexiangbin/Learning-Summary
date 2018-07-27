@@ -27,11 +27,11 @@
 
 ## 算法 :pencil2:
 
-> [Leetcode 题解]()
+> [Leetcode 题解](https://github.com/hexiangbin/Learning-Summary/blob/master/notes/LeetCode%E9%A2%98%E8%A7%A3.md)
 
 对目前所做的题目总结，不定时更新。
 
-> [剑指 Offer 题解]()
+> [剑指 Offer 题解](https://github.com/hexiangbin/Learning-Summary/blob/master/notes/%E5%89%91%E6%8C%87offer%E9%A2%98%E8%A7%A3.md)
 
 依照原书第二版顺序。
 
