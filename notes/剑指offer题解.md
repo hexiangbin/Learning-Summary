@@ -1,6 +1,6 @@
 * [1.二维数组中的查找](#1.二维数组中的查找)
 * [2.替换空格](#2.替换空格)
-* [3.从尾到头打印链表](#3.从尾到头打印链表)
+* [3.从尾到头打印链表](#3-从尾到头打印链表)
 * [4.重建二叉树](#4.重建二叉树)
 * [5.用两个栈实现队列](#5.用两个栈实现队列)
 * [6.旋转数组的最小数字](#6.旋转数组的最小数字)
@@ -65,7 +65,7 @@ public class Solution {
     }
 }
 ```
-# 3.从尾到头打印链表
+# 3-从尾到头打印链表
 
 [NowCoder](https://www.nowcoder.com/practice/d0267f7f55b3412ba93bd35cfa8e8035?tpId=13&tqId=11156&tPage=1&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
 
