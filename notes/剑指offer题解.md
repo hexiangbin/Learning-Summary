@@ -714,3 +714,523 @@ public class Solution {
     }
 }
 ```
+# 25-二叉搜索树与双向链表
+
+[NowCoder](https://www.nowcoder.com/practice/947f6eb80d944a84850b0538bf0ec3a5?tpId=13&tqId=11179&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。
+```java
+public class Solution {
+ public TreeNode Convert(TreeNode root) {
+        if(root==null)
+            return null;
+        if(root.left==null&&root.right==null)
+            return root;
+        // 1.将左子树构造成双链表，并返回链表头节点
+        TreeNode left = Convert(root.left);
+        TreeNode p = left;
+        // 2.定位至左子树双链表最后一个节点
+        while(p!=null&&p.right!=null){
+            p = p.right;
+        }
+        // 3.如果左子树链表不为空的话，将当前root追加到左子树链表
+        if(left!=null){
+            p.right = root;
+            root.left = p;
+        }
+        // 4.将右子树构造成双链表，并返回链表头节点
+        TreeNode right = Convert(root.right);
+        // 5.如果右子树链表不为空的话，将该链表追加到root节点之后
+        if(right!=null){
+            right.left = root;
+            root.right = right;
+        }
+        return left!=null?left:root;       
+    }
+}
+```
+# 26-字符串的排列
+
+[NowCoder](https://www.nowcoder.com/practice/fe6b651b66ae47d7acce78ffdd9a96c7?tpId=13&tqId=11180&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入一个字符串,按字典序打印出该字符串中字符的所有排列。例如输入字符串abc,则打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。
+```java
+public class Solution {
+	 public ArrayList<String> Permutation(String str){  
+        if (str == null)  
+            return null;  
+        ArrayList<String> list = new ArrayList<String>();  
+        char[] pStr = str.toCharArray();  
+  
+        Permutation(pStr, 0, list);  
+        Collections.sort(list);  
+        return list;  
+    }  
+  
+    static void Permutation(char[] str, int i, ArrayList<String> list){  
+        // 如果为空  
+        if (str == null)  
+            return;  
+        // 如果i指向了最后一个字符  
+        if (i == str.length - 1)  {  
+            if (list.contains(String.valueOf(str)))  
+                return;  
+            list.add(String.valueOf(str));  
+        } else  {// i指向当前我们做排列操作的字符串的第一个字符  
+            for (int j = i; j < str.length; j++)  
+            {  // 把做排列操作的字符串的第一个字符和后面的所有字符交换  
+                char temp = str[j];  
+                str[j] = str[i];  
+                str[i] = temp;  
+                // 交换后对i后面的字符串递归做排列操作  
+                Permutation(str, i + 1, list);  
+                // 每一轮结束后换回来进行下一轮排列操作  
+                temp = str[j];  
+                str[j] = str[i];  
+                str[i] = temp;  
+            }  
+        }  
+  
+}
+}
+```
+# 27-数组中出现次数超过一半的数字
+
+[NowCoder](https://www.nowcoder.com/practice/e8a1b01a2df14cb2b228b30ee6a92163?tpId=13&tqId=11181&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。如果不存在则输出0。
+```java
+public class Solution {
+   public int MoreThanHalfNum_Solution(int [] arr) {
+        if(arr==null) return 0;
+        int count=1;
+        int res=arr[0];
+        for(int i=1;i<arr.length;i++){
+            if(count==0){
+                count++;
+                res=arr[i];
+            }
+            if(arr[i]==res)
+                count++;
+            else
+                count--;
+        }
+        //verify
+        count=0;
+        for(int i=0;i<arr.length;i++){
+            if(arr[i]==res)
+                count++;
+        }
+        return (count>arr.length/2)?res:0;
+    }
+}
+```
+# 28-最小的K个数
+
+[NowCoder](https://www.nowcoder.com/practice/6a296eb82cf844ca8539b57c23e6e9bf?tpId=13&tqId=11182&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入n个整数，找出其中最小的K个数。例如输入4,5,1,6,2,7,3,8这8个数字，则最小的4个数字是1,2,3,4,。
+```java
+public class Solution {
+	public ArrayList<Integer> GetLeastNumbers_Solution(int[] nums, int k) {
+    if (k > nums.length || k <= 0)
+        return new ArrayList<>();
+    PriorityQueue<Integer> maxHeap = new PriorityQueue<>((o1, o2) -> o2 - o1);
+    for (int num : nums) {
+        maxHeap.add(num);
+        if (maxHeap.size() > k)
+            maxHeap.poll();
+    }
+    ArrayList<Integer> ret = new ArrayList<>(maxHeap);
+    return ret;
+}
+}
+```
+# 29-连续子数组的最大和
+
+[NowCoder](https://www.nowcoder.com/practice/459bd355da1549fa8a49e350bf3df484?tpId=13&tqId=11183&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+HZ偶尔会拿些专业问题来忽悠那些非计算机专业的同学。今天测试组开完会后,他又发话了:在古老的一维模式识别中,常常需要计算连续子向量的最大和,当向量全为正数的时候,问题很好解决。但是,如果向量中包含负数,是否应该包含某个负数,并期望旁边的正数会弥补它呢？例如:{6,-3,-2,7,-15,1,2,2},连续子向量的最大和为8(从第0个开始,到第3个为止)。给一个数组，返回它的最大连续子序列的和，你会不会被他忽悠住？(子向量的长度至少是1)
+```java
+public class Solution {
+    public int FindGreatestSumOfSubArray(int[] array) {
+        int sum=0;
+        int max=Integer.MIN_VALUE;
+        for(int i=0;i<array.length;i++){
+        	if(sum<0){
+        		sum=array[i];
+        	}else{
+        		sum+=array[i];
+        	}
+        	if(sum>max){
+        		max=sum;
+        	}
+        }
+        return max;
+    }
+}
+```
+# 30-整数中1出现的次数（从1到n整数中1出现的次数）
+
+[NowCoder](https://www.nowcoder.com/practice/bd7f978302044eee894445e244c7eee6?tpId=13&tqId=11184&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+求出1~13的整数中1出现的次数,并算出100~1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数（从1 到 n 中1出现的次数）。
+```java
+
+/*
+设N = abcde ,其中abcde分别为十进制中各位上的数字。
+如果要计算百位上1出现的次数，它要受到3方面的影响：百位上的数字，百位以下（低位）的数字，百位以上（高位）的数字。
+① 如果百位上数字为0，百位上可能出现1的次数由更高位决定。比如：12013，则可以知道百位出现1的情况可能是：100~199，1100~1199,2100~2199，，...，11100~11199，一共1200个。可以看出是由更高位数字（12）决定，并且等于更高位数字（12）乘以 当前位数（100）。
+② 如果百位上数字为1，百位上可能出现1的次数不仅受更高位影响还受低位影响。比如：12113，则可以知道百位受高位影响出现的情况是：100~199，1100~1199,2100~2199，，....，11100~11199，一共1200个。和上面情况一样，并且等于更高位数字（12）乘以 当前位数（100）。但同时它还受低位影响，百位出现1的情况是：12100~12113,一共114个，等于低位数字（113）+1。
+③ 如果百位上数字大于1（2~9），则百位上出现1的情况仅由更高位决定，比如12213，则百位出现1的情况是：100~199,1100~1199，2100~2199，...，11100~11199,12100~12199,一共有1300个，并且等于更高位数字+1（12+1）乘以当前位数（100）。
+*/ 
+public class Solution {
+    public int NumberOf1Between1AndN_Solution(int n) {
+        int count = 0;//1的个数
+        int i = 1;//当前位
+        int current = 0,after = 0,before = 0;
+        while((n/i)!= 0){           
+            current = (n/i)%10;  //当前位数字
+            before = n/(i*10); //高位数字
+            after = n-(n/i)*i; //低位数字
+            //如果为0,出现1的次数由高位决定,等于高位数字 * 当前位数
+            if (current == 0)
+                count += before*i;
+            //如果为1,出现1的次数由高位和低位决定,高位*当前位+低位+1
+            else if(current == 1)
+                count += before * i + after + 1;
+            //如果大于1,出现1的次数由高位决定,//（高位数字+1）* 当前位数
+            else{
+                count += (before + 1) * i;
+            }    
+            //前移一位
+            i = i*10;
+        }
+        return count;
+    }
+}
+```
+# 31-把数组排成最小的数
+
+[NowCoder](https://www.nowcoder.com/practice/8fecd3f8ba334add803bf2a06af1b993?tpId=13&tqId=11185&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323。
+```java
+public class Solution {
+    public String PrintMinNumber(int [] numbers) {
+        ArrayList<Integer> list=new ArrayList<>();
+        for(int i=0;i<numbers.length;i++){
+            list.add(numbers[i]);
+        }
+        Collections.sort(list,(o1, o2) -> (o1+""+o2).compareTo(o2+""+o1));
+        String str="";
+        for(Integer i:list){
+            str+=i;
+        }
+        return str;
+    }
+}
+```
+# 32-丑数
+
+[NowCoder](https://www.nowcoder.com/practice/6aa9e04fc3794f68acf8778237ba065b?tpId=13&tqId=11186&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+把只包含质因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含质因子7。 习惯上我们把1当做是第一个丑数。求按从小到大的顺序的第N个丑数。
+```java
+import java.util.ArrayList;
+public class Solution {
+    public int GetUglyNumber_Solution(int n) {
+        if(n<=0)return 0;
+        ArrayList<Integer> list=new ArrayList<Integer>();
+        list.add(1);
+        int i2=0,i3=0,i5=0;
+        while(list.size()<n)//循环的条件
+        {
+            int m2=list.get(i2)*2;
+            int m3=list.get(i3)*3;
+            int m5=list.get(i5)*5;
+            int min=Math.min(m2,Math.min(m3,m5));
+            list.add(min);
+            if(min==m2)i2++;
+            if(min==m3)i3++;
+            if(min==m5)i5++;
+        }
+        return list.get(list.size()-1);
+    }
+}
+```
+# 33-第一个只出现一次的字符
+
+[NowCoder](https://www.nowcoder.com/practice/1c82e8cf713b4bbeb2a5b31cf5b0417c?tpId=13&tqId=11187&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+在一个字符串(0<=字符串长度<=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置, 如果没有则返回 -1（需要区分大小写）
+```java
+public class Solution {
+    public int FirstNotRepeatingChar(String str) {
+        char[] chars = str.toCharArray();
+        int[] map = new int[256];
+        for (int i = 0; i < chars.length; i++) {
+            map[chars[i]]++;
+        }
+        for (int i = 0; i < chars.length; i++) {
+            if (map[chars[i]] == 1) return i;
+        }
+        return -1;
+    }
+}
+```
+# 34-数组中的逆序对
+
+[NowCoder](https://www.nowcoder.com/practice/96bd6684e04a44eb80e6a68efc0ec6c5?tpId=13&tqId=11188&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组,求出这个数组中的逆序对的总数P。并将P对1000000007取模的结果输出。 即输出P%1000000007
+
+输入描述:题目保证输入的数组中没有的相同的数字
+
+数据范围：
+
+对于%50的数据,size<=10^4
+
+对于%75的数据,size<=10^5
+
+对于%100的数据,size<=2*10^5
+
+示例1:输入
+
+1,2,3,4,5,6,7,0
+
+输出
+
+7
+
+## 解题思路
+看到这个题目，我们的第一反应是顺序扫描整个数组。每扫描到一个数组的时候，逐个比较该数字和它后面的数字的大小。如果后面的数字比它小，则这两个数字就组成了一个逆序对。假设数组中含有n个数字。由于每个数字都要和O(n)这个数字比较，因此这个算法的时间复杂度为O(n^2)。
+我们以数组{7,5,6,4}为例来分析统计逆序对的过程。每次扫描到一个数字的时候，我们不拿ta和后面的每一个数字作比较，否则时间复杂度就是O(n^2)，因此我们可以考虑先比较两个相邻的数字。
+<div align="center"> <img src="../pictures/7491640_1525400721676_20170710223428592.jpg"/> </div><br>
+
+(a) 把长度为4的数组分解成两个长度为2的子数组；
+
+(b) 把长度为2的数组分解成两个成都为1的子数组；
+
+(c) 把长度为1的子数组 合并、排序并统计逆序对 ；
+
+(d) 把长度为2的子数组合并、排序，并统计逆序对；
+
+在上图（a）和（b）中，我们先把数组分解成两个长度为2的子数组，再把这两个子数组分别拆成两个长度为1的子数组。接下来一边合并相邻的子数组，一边统计逆序对的数目。在第一对长度为1的子数组{7}、{5}中7大于5，因此（7,5）组成一个逆序对。同样在第二对长度为1的子数组{6}、{4}中也有逆序对（6,4）。由于我们已经统计了这两对子数组内部的逆序对，因此需要把这两对子数组 排序 如上图（c）所示， 以免在以后的统计过程中再重复统计。
+
+接下来我们统计两个长度为2的子数组子数组之间的逆序对。合并子数组并统计逆序对的过程如下图如下图所示。
+
+我们先用两个指针分别指向两个子数组的末尾，并每次比较两个指针指向的数字。如果第一个子数组中的数字大于第二个数组中的数字，则构成逆序对，并且逆序对的数目等于第二个子数组中剩余数字的个数，如下图（a）和（c）所示。如果第一个数组的数字小于或等于第二个数组中的数字，则不构成逆序对，如图b所示。每一次比较的时候，我们都把较大的数字从后面往前复制到一个辅助数组中，确保 辅助数组（记为copy） 中的数字是递增排序的。在把较大的数字复制到辅助数组之后，把对应的指针向前移动一位，接下来进行下一轮比较。
+<div align="center"> <img src="../pictures/7491640_1499735690500_20170711085550783.jpg"/> </div><br>
+过程：先把数组分割成子数组，先统计出子数组内部的逆序对的数目，然后再统计出两个相邻子数组之间的逆序对的数目。在统计逆序对的过程中，还需要对数组进行排序。如果对排序算法很熟悉，我们不难发现这个过程实际上就是归并排序
+
+```java
+/*归并排序的改进，把数据分成前后两个数组(递归分到每个数组仅有一个数据项)，
+合并数组，合并时，出现前面的数组值array[i]大于后面数组值array[j]时；则
+数组array[mid+1]~array[j]都是小于array[i]的，count += j-mid
+*/
+public class Solution {
+    public int InversePairs(int [] arr) {
+        if(arr==null)
+            return 0;
+        int[] copy=arr.clone();//辅助数组
+        return InversePairs(arr,copy,0,arr.length-1);
+    }
+    public int InversePairs(int[] arr,int[] copy,int start,int end){
+        if(start==end)
+            return 0;
+        int mid=start+(end-start)/2;
+        int leftCount=InversePairs(arr,copy,start,mid);
+        int rightCount=InversePairs(arr,copy,mid+1,end);
+        int count=0;
+        int i=mid;
+        int j=end;
+        int copyIndex=end;
+        while(i>=start && j>=mid+1){
+            if(arr[i]>arr[j]){
+                count+=j-mid;
+                copy[copyIndex--]=arr[i--];
+                if(count>=1000000007)//数值过大求余
+                    count%=1000000007;
+            }else {
+                copy[copyIndex--]=arr[j--];
+            }
+        }
+        while(i>=start){
+            copy[copyIndex--]=arr[i--];
+        }
+        while(j>=mid+1){
+            copy[copyIndex--]=arr[j--];
+        }
+        for(int k=start;k<=end;k++){
+            arr[k]=copy[k];
+        }
+        return (count+leftCount+rightCount)%1000000007;
+    }
+}
+```
+# 35-两个链表的第一个公共结点
+
+[NowCoder](https://www.nowcoder.com/practice/6ab1d9a29e88450685099d45c9e31e46?tpId=13&tqId=11189&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入两个链表，找出它们的第一个公共结点。
+```java
+public class Solution {
+    public ListNode FindFirstCommonNode(ListNode pHead1, ListNode pHead2) {
+    	int length1=getLength(pHead1);
+    	int length2=getLength(pHead2);
+    	if(length1>length2){
+    		for(int i=0;i<length1-length2;i++){
+    			pHead1=pHead1.next;
+    		}
+    	}
+    	if(length1<length2){
+    		for(int i=0;i<length2-length1;i++){
+    			pHead2=pHead2.next;
+    		}
+    	}
+    	while(pHead1!=pHead2){
+    		pHead1=pHead1.next;
+    		pHead2=pHead2.next;
+    	}
+    	return pHead1;
+    	
+    }
+    public int getLength(ListNode pHead){
+    	int length=0;
+    	while(pHead!=null){
+    		length++;
+    		pHead=pHead.next;
+    	}
+    	return length;
+    }
+}
+```
+# 36-数字在排序数组中出现的次数
+
+[NowCoder](https://www.nowcoder.com/practice/70610bf967994b22bb1c26f9ae901fa2?tpId=13&tqId=11190&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+统计一个数字在排序数组中出现的次数。
+## 正常解法
+```java
+public class Solution {
+    public int GetNumberOfK(int [] array , int k) {
+        int length = array.length;
+        if(length == 0){
+            return 0;
+        }
+        int firstK = getFirstK(array, k, 0, length-1);
+        int lastK = getLastK(array, k, 0, length-1);
+        if(firstK != -1 && lastK != -1){
+             return lastK - firstK + 1;
+        }
+        return 0;
+    }
+    //递归写法
+    private int getFirstK(int [] array , int k, int start, int end){
+        if(start > end){
+            return -1;
+        }
+        int mid = (start + end) >> 1;
+        if(array[mid] > k){
+            return getFirstK(array, k, start, mid-1);
+        }else if (array[mid] < k){
+            return getFirstK(array, k, mid+1, end);
+        }else if(mid-1 >=0 && array[mid-1] == k){
+            return getFirstK(array, k, start, mid-1);
+        }else{
+            return mid;
+        }
+    }
+    //循环写法
+    private int getLastK(int [] array , int k, int start, int end){
+        int length = array.length;
+        int mid = (start + end) >> 1;
+        while(start <= end){
+            if(array[mid] > k){
+                end = mid-1;
+            }else if(array[mid] < k){
+                start = mid+1;
+            }else if(mid+1 < length && array[mid+1] == k){
+                start = mid+1;
+            }else{
+                return mid;
+            }
+            mid = (start + end) >> 1;
+        }
+        return -1;
+    }
+}
+```
+## 特定解法
+```java
+//因为data中都是整数，所以可以稍微变一下，不是搜索k的两个位置，而是搜索k-0.5和k+0.5
+//这两个数应该插入的位置，然后相减即可。
+public class Solution {
+    public int GetNumberOfK(int [] arr , int k) {
+        return binarySearch(arr,k+0.5)-binarySearch(arr,k-0.5);
+    }
+    public int binarySearch(int[] arr,double k){
+        int start=0;
+        int end=arr.length-1;
+        while(start<=end){
+            int mid=(start+end)>>1;
+            if(arr[mid]>k)
+                end=mid-1;
+            else
+                start=mid+1;
+        }
+        return start;
+    }
+}
+```
+# 37-二叉树的深度
+
+[NowCoder](https://www.nowcoder.com/practice/435fb86331474282a3499955f0a41e8b?tpId=13&tqId=11191&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
+```java
+public class Solution {
+    public int TreeDepth(TreeNode root) {
+        if(root==null)return 0;
+		return Math.max(1+TreeDepth(root.left),1+TreeDepth(root.right));
+    }
+}
+```
+# 38-平衡二叉树
+
+[NowCoder](https://www.nowcoder.com/practice/8b3b95850edb4115918ecebdf1b4d222?tpId=13&tqId=11192&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+输入一棵二叉树，判断该二叉树是否是平衡二叉树。
+```java
+public class Solution {
+    public boolean IsBalanced_Solution(TreeNode root){
+		if(root==null)return true;
+		int left=TreeDepth(root.left);
+		int right=TreeDepth(root.right);
+		if(Math.abs(left-right)>1)return false;
+		return IsBalanced_Solution(root.left) && IsBalanced_Solution(root.right);
+	}
+	public int TreeDepth(TreeNode root){
+		if(root==null)return 0;
+		return Math.max(1+TreeDepth(root.left),1+TreeDepth(root.right));
+	}
+
+}
+```
+
+
