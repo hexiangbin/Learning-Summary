@@ -38,6 +38,17 @@
 * [38.平衡二叉树](#38-平衡二叉树)
 * [39.数组中只出现一次的数字](#39-数组中只出现一次的数字)
 * [40.和为s的连续正数序列](#40-和为s的连续正数序列)
+* [41.左旋转字符串](#41-左旋转字符串)
+* [42.翻转单词顺序列](#42-翻转单词顺序列)
+* [43.扑克牌顺子](#43-扑克牌顺子)
+* [44.孩子们的游戏](#44-孩子们的游戏)
+* [45.求等差数列](#45-求等差数列)
+* [46.不用加减乘除做加法](#46-不用加减乘除做加法)
+* [47.把字符串转换成整数](#47-把字符串转换成整数)
+* [48.数组中重复的数字](#48-数组中重复的数字)
+* [49.构建乘积数组](#49-构建乘积数组)
+* [50.正则表达式匹配](#50-正则表达式匹配)
+* [51.表示数值的字符串](#51-表示数值的字符串)
 * 题号顺序参照牛客网OJ顺序
 
 # 1-二维数组中的查找
@@ -1439,7 +1450,7 @@ public class Solution {
 }
 }
 ```
-# 44-求1+2+3+...+n
+# 45-求等差数列
 
 [NowCoder](https://www.nowcoder.com/practice/7a0da8fc483247ff8800059e12d7caf1?tpId=13&tqId=11200&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
 
@@ -1454,7 +1465,7 @@ public class Solution {
     }
 }
 ```
-# 45-不用加减乘除做加法
+# 46-不用加减乘除做加法
 
 [NowCoder](https://www.nowcoder.com/practice/59ac416b4b944300b617d4f7f111b215?tpId=13&tqId=11201&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
 
@@ -1490,7 +1501,7 @@ public class Solution {
     }
 }
 ```
-# 46-把字符串转换成整数
+# 47-把字符串转换成整数
 
 [NowCoder](https://www.nowcoder.com/practice/1277c681251b4372bdef344468e4f26e?tpId=13&tqId=11202&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
 
@@ -1554,7 +1565,7 @@ public class Solution {
     }
 }
 ```
-# 47-数组中重复的数字
+# 48-数组中重复的数字
 
 [NowCoder](https://www.nowcoder.com/practice/623a5ac0ea5b4e5f95552655361ae0a8?tpId=13&tqId=11203&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
 
@@ -1575,12 +1586,12 @@ public class Solution {
     }
 }
 ```
-# 48-构建乘积数组
+# 49-构建乘积数组
 
 [NowCoder](https://www.nowcoder.com/practice/94a4d381a68b47b7a8bed86f2975db46?tpId=13&tqId=11204&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
 
 ## 题目描述
-给定一个数组A[0,1,...,n-1],请构建一个数组B[0,1,...,n-1],其中B中的元素B[i]=A[0]*A[1]*...*A[i-1]*A[i+1]*...*A[n-1]。不能使用除法。
+给定一个数组A[0,1,...,n-1],请构建一个数组B[0,1,...,n-1],其中B中的元素B[i]=A[0]* A[1]*...* A[i-1]* A[i+1]*...* A[n-1]。不能使用除法。
 
 ## 解题思路
 B[i]的值可以看作下图的矩阵中每行的乘积。因此我们的思路就很清晰了，先算下三角中的连乘，即我们先算出B[i]中的一部分，然后倒过来按上三角中的分布规律，把另一部分也乘进去。
@@ -1608,29 +1619,29 @@ public class Solution {
     }
 }
 ```
-# 49-正则表达式匹配
+# 50-正则表达式匹配
 
 [NowCoder](https://www.nowcoder.com/practice/45327ae22b7b413ea21df13ee7d6429c?tpId=13&tqId=11205&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
 
 ## 题目描述
-请实现一个函数用来匹配包括'.'和'*'的正则表达式。模式中的字符'.'表示任意一个字符，而'*'表示它前面的字符可以出现任意次（包含0次）。 在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但是与"aa.a"和"ab*a"均不匹配
+请实现一个函数用来匹配包括'.'和' * '的正则表达式。模式中的字符'.'表示任意一个字符，而' * '表示它前面的字符可以出现任意次（包含0次）。 在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab * ac* a"匹配，但是与"aa.a"和"ab* a"均不匹配
 
 ## 解题思路
-当模式中的第二个字符不是“*”时：
+当模式中的第二个字符不是“ * ”时：
 
 1、如果字符串第一个字符和模式中的第一个字符相匹配，那么字符串和模式都后移一个字符，然后匹配剩余的。
 
 2、如果 字符串第一个字符和模式中的第一个字符相不匹配，直接返回false。
 
-而当模式中的第二个字符是“*”时：
+而当模式中的第二个字符是“ * ”时：
 
 如果字符串第一个字符跟模式第一个字符不匹配，则模式后移2个字符，继续匹配。如果字符串第一个字符跟模式第一个字符匹配，可以有3种匹配方式：
 
-1、模式后移2字符，相当于x*被忽略；
+1、模式后移2字符，相当于x* 被忽略；
 
 2、字符串后移1字符，模式后移2字符；
 
-3、字符串后移1字符，模式不变，即继续匹配字符下一位，因为*可以匹配多位；
+3、字符串后移1字符，模式不变，即继续匹配字符下一位，因为* 可以匹配多位；
 
 ```java
 public class Solution {
@@ -1671,7 +1682,7 @@ public class Solution {
     }
 }
 ```
-# 50-表示数值的字符串
+# 51-表示数值的字符串
 
 [NowCoder](https://www.nowcoder.com/practice/6f8c901d091949a5837e24bb82a731f2?tpId=13&tqId=11206&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
 
