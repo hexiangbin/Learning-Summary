@@ -1315,3 +1315,384 @@ public class Solution {
     }
 }
 ```
+# 41-左旋转字符串
+
+[NowCoder](https://www.nowcoder.com/practice/12d959b108cb42b1ab72cef4d36af5ec?tpId=13&tqId=11196&tPage=3&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+## 题目描述
+汇编语言中有一种移位指令叫做循环左移（ROL），现在有个简单的任务，就是用字符串模拟这个指令的运算结果。对于一个给定的字符序列S，请你把其循环左移K位后的序列输出。例如，字符序列S=”abcXYZdef”,要求输出循环左移3位后的结果，即“XYZdefabc”。是不是很简单？OK，搞定它！
+```java
+public class Solution {
+    public String LeftRotateString(String str,int n) {
+        int len = str.length();
+        if(len == 0) return "";
+        n = n % len;
+        str+=str;
+        return str.substring(n, len+n);
+    }
+}
+```
+# 42-翻转单词顺序列
+
+[NowCoder](https://www.nowcoder.com/practice/3194a4f4cf814f63919d0790578d51f3?tpId=13&tqId=11197&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+牛客最近来了一个新员工Fish，每天早晨总是会拿着一本英文杂志，写些句子在本子上。同事Cat对Fish写的内容颇感兴趣，有一天他向Fish借来翻看，但却读不懂它的意思。例如，“student. a am I”。后来才意识到，这家伙原来把句子单词的顺序翻转了，正确的句子应该是“I am a student.”。Cat对一一的翻转这些单词顺序可不在行，你能帮助他么？
+## 解法一
+```java
+/*
+    算法思想：先翻转整个句子，然后，依次翻转每个单词。
+    依据空格来确定单词的起始和终止位置
+*/
+public class Solution {
+    public String ReverseSentence(String str) {
+        char[] chars = str.toCharArray();
+        reverse(chars,0,chars.length - 1);
+        int blank = -1;
+        for(int i = 0;i < chars.length;i++){
+            if(chars[i] == ' '){ 
+                int nextBlank = i;
+                reverse(chars,blank + 1,nextBlank - 1);
+                blank = nextBlank;
+            }
+        }
+        reverse(chars,blank + 1,chars.length - 1);//最后一个单词单独进行反转
+        return new String(chars);
+         
+    }
+    public void reverse(char[] chars,int low,int high){
+        while(low < high){
+            char temp = chars[low];
+            chars[low] = chars[high];
+            chars[high] = temp;
+            low++;
+            high--;
+        }
+    }
+}
+```
+## 解法二
+```java
+public class Solution {
+    public String ReverseSentence(String str) {
+        if(str.trim().equals("")){
+            return str;
+        }
+        String[] s = str.split(" ");
+        StringBuffer sb = new StringBuffer();
+        int i;
+        for (i = s.length-1; i >=0;i--){
+            sb.append(s[i]);
+            if(i > 0){
+                sb.append(" ");
+            }
+        }
+        return sb.toString();
+    }
+}
+```
+# 43-扑克牌顺子
+
+[NowCoder](https://www.nowcoder.com/practice/762836f4d43d43ca9deb273b3de8e1f4?tpId=13&tqId=11198&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+LL今天心情特别好,因为他去买了一副扑克牌,发现里面居然有2个大王,2个小王(一副牌原本是54张),他随机从中抽出了5张牌,想测测自己的手气,看看能不能抽到顺子,如果抽到的话,他决定去买体育彩票,嘿嘿！！“红心A,黑桃3,小王,大王,方片5”,“Oh My God!”不是顺子.....LL不高兴了,他想了想,决定大\小 王可以看成任何数字,并且A看作1,J为11,Q为12,K为13。上面的5张牌就可以变成“1,2,3,4,5”(大小王分别看作2和4),“So Lucky!”。LL决定去买体育彩票啦。 现在,要求你使用这幅牌模拟上面的过程,然后告诉我们LL的运气如何， 如果牌能组成顺子就输出true，否则就输出false。为了方便起见,你可以认为大小王是0。
+```java
+public class Solution {
+    public boolean isContinuous(int [] nums) {
+        if (nums.length < 5)
+            return false;
+        Arrays.sort(nums);
+        int count = 0;//大小王=0
+        for (int num : nums)
+            if (num == 0)
+                count++;
+        for (int i = count; i < nums.length - 1; i++) {
+            if (nums[i + 1] == nums[i])
+                return false;
+            count -= nums[i + 1] - nums[i] - 1;
+        }
+        return count >= 0;
+    }
+}
+```
+# 44-孩子们的游戏
+
+[NowCoder](https://www.nowcoder.com/practice/f78a359491e64a50bce2d89cff857eb6?tpId=13&tqId=11199&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+每年六一儿童节,牛客都会准备一些小礼物去看望孤儿院的小朋友,今年亦是如此。HF作为牛客的资深元老,自然也准备了一些小游戏。其中,有个游戏是这样的:首先,让小朋友们围成一个大圈。然后,他随机指定一个数m,让编号为0的小朋友开始报数。每次喊到m-1的那个小朋友要出列唱首歌,然后可以在礼品箱中任意的挑选礼物,并且不再回到圈中,从他的下一个小朋友开始,继续0...m-1报数....这样下去....直到剩下最后一个小朋友,可以不用表演,并且拿到牛客名贵的“名侦探柯南”典藏版(名额有限哦!!)。请你试着想下,哪个小朋友会得到这份礼品呢？(注：小朋友的编号是从0到n-1)
+```java
+/*
+数学归纳法
+递推公式
+f[1]=0;
+f[i]=(f[i-1]+m)%i;  (i>1)
+*/
+public class Solution {
+    public int LastRemaining_Solution(int n, int m) {
+    if (n == 0)
+        return -1;
+    if (n == 1)
+        return 0;
+    return (LastRemaining_Solution(n - 1, m) + m) % n;
+}
+}
+```
+# 44-求1+2+3+...+n
+
+[NowCoder](https://www.nowcoder.com/practice/7a0da8fc483247ff8800059e12d7caf1?tpId=13&tqId=11200&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+求1+2+3+...+n，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
+```java
+public class Solution {
+    public int Sum_Solution(int n) {
+        int sum = n;
+        boolean ans = (n>0)&&((sum+=Sum_Solution(n-1))>0);
+        return sum;
+    }
+}
+```
+# 45-不用加减乘除做加法
+
+[NowCoder](https://www.nowcoder.com/practice/59ac416b4b944300b617d4f7f111b215?tpId=13&tqId=11201&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+写一个函数，求两个整数之和，要求在函数体内不得使用四则运算符号:+、-、*、/
+
+## 解题思路
+首先看十进制是如何做的： 5+7=12，三步走
+
+第一步：相加各位的值，不算进位，得到2。
+
+第二步：计算进位值，得到10. 如果这一步的进位值为0，那么第一步得到的值就是最终结果。
+
+第三步：重复上述两步，只是相加的值变成上述两步的得到的结果2和10，得到12。
+
+同样我们可以用三步走的方式计算二进制值相加： 5-101，7-111 第一步：相加各位的值，不算进位，得到010，二进制每位相加就相当于各位做异或操作，101^111。
+
+第二步：计算进位值，得到1010，相当于各位做与操作得到101，再向左移一位得到1010，(101&111)<<1。
+
+第三步重复上述两步， 各位相加 010^1010=1000，进位值为100=(010&1010)<<1。
+
+继续重复上述两步：1000^100 = 1100，进位值为0，跳出循环，1100为最终结果。
+```java
+
+public class Solution {
+    public int Add(int num1,int num2) {
+        while (num2!=0) {
+            int temp = num1^num2;
+            num2 = (num1&num2)<<1;
+            num1 = temp;
+        }
+        return num1;
+    }
+}
+```
+# 46-把字符串转换成整数
+
+[NowCoder](https://www.nowcoder.com/practice/1277c681251b4372bdef344468e4f26e?tpId=13&tqId=11202&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+把字符串转成整数
+
+题目描述
+
+将一个字符串转换成一个整数，要求不能使用字符串转换整数的库函数。数值为0或者字符串不是一个合法的数值则返回0
+
+输入描述:输入一个字符串,包括数字字母符号,可以为空
+
+输出描述:如果是合法的数值表达则返回该数字，否则返回0
+
+示例1
+
+输入
+
++2147483647
+
+1a33
+ 
+输出
+
+2147483647
+
+0
+```java
+
+public class Solution {
+    public static int StrToInt(String str) {
+        //判断输入是否合法
+        if (str == null || str.trim().isEmpty()) {
+            return 0;
+        }
+        // symbol=0,说明该数为正数;symbol=1，该数为负数;start用来区分第一位是否为符号位
+        int symbol = 0;
+        int start = 0;
+        char[] chars = str.trim().toCharArray();
+        if (chars[0] == '+') {
+            start = 1;
+        } else if (chars[0] == '-') {
+            start = 1;
+            symbol = 1;
+        }
+        int result = 0;
+        for (int i = start; i < chars.length; i++) {
+            if (chars[i] > '9' || chars[i] < '0') {
+                return 0;
+            }
+            //判断是否会溢出，溢出的话直接return
+            int sum= result * 10 + (int) (chars[i] - '0');
+            if((sum-(int) (chars[i] - '0'))/10!=result){
+                return 0;
+            }  
+            result=result * 10 + (int) (chars[i] - '0');
+        }
+        // 根据符号，决定res是正数还是负数
+        result = (int) Math.pow(-1, symbol) * result;
+        return result;
+    }
+}
+```
+# 47-数组中重复的数字
+
+[NowCoder](https://www.nowcoder.com/practice/623a5ac0ea5b4e5f95552655361ae0a8?tpId=13&tqId=11203&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+在一个长度为n的数组里的所有数字都在0到n-1的范围内。 数组中某些数字是重复的，但不知道有几个数字是重复的。也不知道每个数字重复几次。请找出数组中任意一个重复的数字。 例如，如果输入长度为7的数组{2,3,1,0,2,5,3}，那么对应的输出是第一个重复的数字2。
+```java
+public class Solution {
+    public boolean duplicate(int numbers[], int length, int[] duplication) {
+        boolean[] flag = new boolean[length];
+        for (int i = 0; i < length; i++) {
+            if (flag[numbers[i]] == true) {
+                duplication[0] = numbers[i];//系统要求结果赋值到duplication[0]
+                return true;
+            }
+            flag[numbers[i]] = true;
+        }
+        return false;
+    }
+}
+```
+# 48-构建乘积数组
+
+[NowCoder](https://www.nowcoder.com/practice/94a4d381a68b47b7a8bed86f2975db46?tpId=13&tqId=11204&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+给定一个数组A[0,1,...,n-1],请构建一个数组B[0,1,...,n-1],其中B中的元素B[i]=A[0]*A[1]*...*A[i-1]*A[i+1]*...*A[n-1]。不能使用除法。
+
+## 解题思路
+B[i]的值可以看作下图的矩阵中每行的乘积。因此我们的思路就很清晰了，先算下三角中的连乘，即我们先算出B[i]中的一部分，然后倒过来按上三角中的分布规律，把另一部分也乘进去。
+<div align="center"> <img src="../pictures/841505_1472459965615_8640A8F86FB2AB3117629E2456D8C652.jpg"/> </div><br>
+
+```java
+public class Solution {
+    public int[] multiply(int[] A) {
+        int length = A.length;
+        int[] B = new int[length];
+        if(length != 0 ){
+            B[0] = 1;
+            //计算下三角连乘
+            for(int i = 1; i < length; i++){
+                B[i] = B[i-1] * A[i-1];
+            }
+            int temp = 1;
+            //计算上三角
+            for(int j = length-2; j >= 0; j--){
+                temp *= A[j+1];
+                B[j] *= temp;
+            }
+        }
+        return B;
+    }
+}
+```
+# 49-正则表达式匹配
+
+[NowCoder](https://www.nowcoder.com/practice/45327ae22b7b413ea21df13ee7d6429c?tpId=13&tqId=11205&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+请实现一个函数用来匹配包括'.'和'*'的正则表达式。模式中的字符'.'表示任意一个字符，而'*'表示它前面的字符可以出现任意次（包含0次）。 在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但是与"aa.a"和"ab*a"均不匹配
+
+## 解题思路
+当模式中的第二个字符不是“*”时：
+
+1、如果字符串第一个字符和模式中的第一个字符相匹配，那么字符串和模式都后移一个字符，然后匹配剩余的。
+
+2、如果 字符串第一个字符和模式中的第一个字符相不匹配，直接返回false。
+
+而当模式中的第二个字符是“*”时：
+
+如果字符串第一个字符跟模式第一个字符不匹配，则模式后移2个字符，继续匹配。如果字符串第一个字符跟模式第一个字符匹配，可以有3种匹配方式：
+
+1、模式后移2字符，相当于x*被忽略；
+
+2、字符串后移1字符，模式后移2字符；
+
+3、字符串后移1字符，模式不变，即继续匹配字符下一位，因为*可以匹配多位；
+
+```java
+public class Solution {
+    public boolean match(char[] str, char[] pattern) {
+    if (str == null || pattern == null) {
+        return false;
+    }
+    int strIndex = 0;
+    int patternIndex = 0;
+    return match(str, strIndex, pattern, patternIndex);
+    }
+  
+    public boolean match(char[] str, int strIndex, char[] pattern, int patternIndex) {
+    //有效性检验：str到尾，pattern到尾，匹配成功
+    if (strIndex == str.length && patternIndex == pattern.length) {
+        return true;
+    }
+    //pattern先到尾，匹配失败
+    if (strIndex != str.length && patternIndex == pattern.length) {
+        return false;
+    }
+    //模式第2个是*，且字符串第1个跟模式第1个匹配,分3种匹配模式；如不匹配，模式后移2位
+    //注意数组越界问题
+    if (patternIndex + 1 < pattern.length && pattern[patternIndex + 1] == '*') {
+        if ((strIndex != str.length && pattern[patternIndex] == str[strIndex]) || (pattern[patternIndex] == '.' && strIndex != str.length)) {
+            return match(str, strIndex, pattern, patternIndex + 2)//模式后移2，视为x*匹配0个字符
+                    || match(str, strIndex + 1, pattern, patternIndex + 2)//视为模式匹配1个字符
+                    || match(str, strIndex + 1, pattern, patternIndex);//*匹配1个，再匹配str中的下一个
+        } else {
+            return match(str, strIndex, pattern, patternIndex + 2);
+        }
+    }
+    //模式第2个不是*，且字符串第1个跟模式第1个匹配，则都后移1位，否则直接返回false
+    if ((strIndex != str.length && pattern[patternIndex] == str[strIndex]) || (pattern[patternIndex] == '.' && strIndex != str.length)) {
+        return match(str, strIndex + 1, pattern, patternIndex + 1);
+    }
+    return false;
+    }
+}
+```
+# 50-表示数值的字符串
+
+[NowCoder](https://www.nowcoder.com/practice/6f8c901d091949a5837e24bb82a731f2?tpId=13&tqId=11206&tPage=3&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+## 题目描述
+请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串"+100","5e2","-123","3.1416"和"-1E-16"都表示数值。 但是"12e","1a3.14","1.2.3","+-5"和"12e+4.3"都不是。
+
+
+以下对正则进行解释:
+
+[\\+\\-]?            -> 正或负符号出现与否
+
+\\d*                 -> 整数部分是否出现，如-.34 或 +3.34均符合
+
+(\\.\\d+)?           -> 如果出现小数点，那么小数点后面必须有数字；否则一起不出现
+
+([eE][\\+\\-]?\\d+)? -> 如果存在指数部分，那么e或E肯定出现，+或-可以不出现，紧接着必须跟着整数；或者整个部分都不出现
+
+```java
+public class Solution {
+    public boolean isNumeric(char[] str) {
+        String string=String.valueOf(str);
+        return string.matches("[\\+-]?\\d*(\\.\\d*)?([eE][\\+-]?\\d+)?");
+    }
+}
