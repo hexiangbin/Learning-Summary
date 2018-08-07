@@ -1,7 +1,3 @@
-/*
-!.gitignore
-!assembly.xml
-!pom.xml
-!/src
-!/script
-!/dubbo
+
+*.xml
+/.idea
