@@ -129,24 +129,22 @@ public class Solution {
 ```java
 public class Solution {
     public TreeNode reConstructBinaryTree(int [] pre,int [] in) {
-   		TreeNode root=reConstructBinaryTree(pre,0,pre.length-1,in,0,in.length-1);
-        return root;
-    }
-    private TreeNode reConstructBinaryTree(int[] pre,int startPre,int endPre,int[] in ,int startIn,int endIn){
-        if(startPre>endPre||startIn>endIn)return null;//递归结束条件：没有元素
-        TreeNode root=new TreeNode(pre[startPre]);
-        for(int i=startIn;i<=endIn;i++){
-            if(in[i]==root.val){
-                //根据root元素把pre和in分成左右两部分，左边是root的左子树，右边是root的右子树，继续递归求解还原整个二叉树
-                //in[startin,i-1]左,i根,in[i+1,endin]右
-                //startpre根,pre[startpre+1,startpre+i-startin]左,pre[startpre+i-startin+1,endpre]右
-                root.left=reConstructBinaryTree(pre,startPre+1,startPre+i-startIn,in ,startIn,i-1);
-                root.right=reConstructBinaryTree(pre,startPre+i-startIn+1,endPre,in ,i+1,endIn);
+        if (pre.length == 0 || in.length == 0) {
+            return null;
+        }
+        TreeNode root = new TreeNode(pre[0]);
+        // 在中序中找到前序的根
+        for (int i = 0; i < in.length; i++) {
+            if (in[i] == pre[0]) {
+                // 左子树，注意 copyOfRange 函数，左闭右开
+                root.left = reConstructBinaryTree(Arrays.copyOfRange(pre, 1, i + 1), Arrays.copyOfRange(in, 0, i));
+                // 右子树，注意 copyOfRange 函数，左闭右开
+                root.right = reConstructBinaryTree(Arrays.copyOfRange(pre, i + 1, pre.length), Arrays.copyOfRange(in, i + 1, in.length));
+                break;
             }
         }
         return root;
     }
-   
 }
 ```
 # 5-用两个栈实现队列
