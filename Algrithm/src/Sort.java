@@ -1,15 +1,30 @@
-* 排序算法
-    * [冒泡排序](#冒泡排序)
-    * [选择排序](#选择排序)
-    * [插入排序](#插入排序)
-    * [快速排序](#快速排序)
-    * [归并排序](#归并排序)
-    * [堆排序](#堆排序)
+import java.util.Arrays;
+import java.util.Random;
 
-[十大经典排序算法动画与解析](https://mp.weixin.qq.com/s/vn3KiV-ez79FmbZ36SX9lg)
-## 冒泡排序
-```java
-public static void bubbleSort(int[] nums) {
+/**
+ * 排序算法总结
+ *
+ * @author HeXiangBin
+ * @date 2019-11-04
+ */
+public class Sort {
+    public static void main(String[] args) {
+        Random random = new Random();
+        int[] nums = new int[20];
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = random.nextInt(1000);
+        }
+
+//        bubbleSort(nums);
+//        selectSort(nums);
+//        insertSort(nums);
+//        quickSort(nums);
+        mergeSort(nums);
+
+        System.out.println(Arrays.toString(nums));
+    }
+
+    public static void bubbleSort(int[] nums) {
         for (int end = nums.length-1; end > 0; end--) {
             boolean isSort = true;
             for (int j = 0; j < end; j++) {
@@ -25,10 +40,8 @@ public static void bubbleSort(int[] nums) {
             }
         }
     }
-```
-## 选择排序
-```java
-public static void selectSort(int[] nums) {
+
+    public static void selectSort(int[] nums) {
         for (int start = 0; start < nums.length; start++) {
             int min = start;
             for (int i = start + 1; i < nums.length; i++) {
@@ -40,10 +53,8 @@ public static void selectSort(int[] nums) {
             swap(nums, start, min);
         }
     }
-```
-## 插入排序
-```java
-public static void insertSort(int[] nums) {
+
+    public static void insertSort(int[] nums) {
         for (int i = 1; i < nums.length; i++) {
             // 当前要插入的数
             int base = nums[i];
@@ -56,9 +67,7 @@ public static void insertSort(int[] nums) {
             nums[j+1] = base;
         }
     }
-```
-## 快速排序
-```java
+
     public static void quickSort(int[] nums) {
         if (nums == null || nums.length == 0) {
             return;
@@ -102,10 +111,8 @@ public static void insertSort(int[] nums) {
 
         return new int[]{less, more-1};
     }
-```
-## 归并排序
-```java
-public static void mergeSort(int[] nums) {
+
+    public static void mergeSort(int[] nums) {
         if (nums == null || nums.length == 0) {
             return;
         }
@@ -147,4 +154,10 @@ public static void mergeSort(int[] nums) {
             nums[left++] = temp[i];
         }
     }
-```
+
+    public static void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
