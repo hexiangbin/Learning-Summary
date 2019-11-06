@@ -19,8 +19,8 @@ public class Sort {
 //        selectSort(nums);
 //        insertSort(nums);
 //        quickSort(nums);
-        mergeSort(nums);
-
+//        mergeSort(nums);
+          heapSort(nums);
         System.out.println(Arrays.toString(nums));
     }
 
@@ -152,6 +152,49 @@ public class Sort {
         // 赋值原数组
         for (int i = 0; i < temp.length; i++) {
             nums[left++] = temp[i];
+        }
+    }
+
+    public static void heapSort(int[] nums) {
+        for (int i = nums.length - 1; i >= 0; i--) {
+            // 将0-end区间的数组进行建堆，建完堆后排在堆首的就是最大数字
+            buildHeap(nums, i);
+            // 交换最大数字到队尾
+            swap(nums, 0, i);
+        }
+    }
+
+    public static void buildHeap(int[] nums, int end) {
+        for (int i = end; i >= 0; i--) {
+            // 从后往前开始调整推,调整完后i的子树满足最大堆特性
+            adjustHeap(nums, i, end);
+        }
+    }
+
+    public static void adjustHeap(int[] nums, int current, int end) {
+        if (current <= end) {
+            int left = current * 2 + 1;
+            int right = current * 2 + 2;
+
+            // 假设当前节点就是最大值
+            int max = current;
+
+            if (left <= end && nums[left] > nums[max]) {
+                //如果比当前根元素要大，记录它的位置
+                max = left;
+            }
+
+            if (right <= end && nums[right] > nums[max]) {
+                //如果比当前根元素要大，记录它的位置
+                max = right;
+            }
+
+            if (max != current) {
+                // 说明当前节点不符合最大堆特性，需要调整
+                swap(nums, current, max);
+                // 交换后的节点有可能不符合最大堆特性，还需要继续调整
+                adjustHeap(nums, max, end);
+            }
         }
     }
 
