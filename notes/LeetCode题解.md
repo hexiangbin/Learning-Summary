@@ -1,9 +1,7 @@
 * [数据结构相关问题](#数据结构相关问题)
     * [数组与字符串](#数组与字符串)
-    * [队列](#)
-    * [二叉树](#)
-    * [查找表](#)
     * [链表](#链表)
+    * [栈](#栈)
 
 # LeetCode题解 #
 
@@ -427,6 +425,47 @@ class Solution {
         }
         
         return prev;
+    }
+}
+```
+### 栈
+[20. 有效的括号](https://leetcode-cn.com/problems/valid-parentheses/)
+
+给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，判断字符串是否有效。
+
+有效字符串需满足：
+
+左括号必须用相同类型的右括号闭合。
+左括号必须以正确的顺序闭合。
+注意空字符串可被认为是有效字符串。
+
+```java
+class Solution {
+    public boolean isValid(String s) {
+        HashMap<Character, Character> map = new HashMap<>();
+        map.put(')', '(');
+        map.put('}', '{');
+        map.put(']', '[');
+        Stack<Character> stack = new Stack<>();
+        
+        for(int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if(map.containsKey(c)) {
+                // 是右开放符号
+                if(!stack.isEmpty() && stack.peek() == map.get(c)) {
+                    // 匹配时消除字符
+                    stack.pop();
+                } else {
+                    // stack为空，或者不匹配时推入字符
+                    stack.push(c);
+                }
+            } else {
+                // 不是右开放符号，推入字符
+                stack.push(c);
+            }
+        }
+        
+        return stack.isEmpty();
     }
 }
 ```
