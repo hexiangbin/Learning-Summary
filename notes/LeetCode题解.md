@@ -3,7 +3,7 @@
     * [队列](#)
     * [二叉树](#)
     * [查找表](#)
-    * [链表](#)
+    * [链表](#链表)
 
 # LeetCode题解 #
 
@@ -343,6 +343,90 @@ class Solution {
             len=Math.max(len,right-left+1);
         }
         return len;
+    }
+}
+```
+### 链表
+[25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
+
+给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
+
+k 是一个正整数，它的值小于或等于链表的长度。
+
+如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
+
+示例 :
+
+给定这个链表：1->2->3->4->5
+
+当 k = 2 时，应当返回: 2->1->4->3->5
+
+当 k = 3 时，应当返回: 3->2->1->4->5
+
+说明 :
+
+你的算法只能使用常数的额外空间。
+你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+```java
+class Solution {
+    // 解题图解参考：
+    // https://leetcode-cn.com/problems/reverse-nodes-in-k-group/solution/tu-jie-kge-yi-zu-fan-zhuan-lian-biao-by-user7208t/
+    public ListNode reverseKGroup(ListNode head, int k) {
+        // 定义一个虚拟头节点 dummy
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        // prev 表示翻转的k链表的前节点，end表示k链表的结束节点
+        ListNode prev = dummy;
+        ListNode end = dummy;
+        
+        while(end.next != null) {
+            for(int i = 0 ; i < k ; i++) {
+                if(end == null) {
+                    break;
+                }
+                end = end.next;
+            }
+            if(end == null) {
+                // 说明后面不满足k个节点，跳出循环
+                break;
+            }
+        
+            // 这次翻转链表的开始节点
+            ListNode start = prev.next;
+            // 下次要翻转链表的开始节点
+            ListNode next = end.next;
+            // 断开这一段链表，开始翻转
+            end.next = null;
+            // prev.next = 翻转后的头节点
+            prev.next = reverse(start);
+            // start翻转前是头节点，翻转后是尾节点，所以翻转后start.next=下次要翻转链表的开始节点
+            start.next = next;
+            
+            // 开始重置prev和end,都为翻转后链表的尾节点（注意，翻转后，这里的start已经是链表的尾节点）
+            prev = start;
+            end = start;
+        }
+        
+        return dummy.next;
+    }
+    
+    // 翻转链表，返回翻转后的头节点
+    private ListNode reverse(ListNode root) {
+        if(root == null) {
+            return root;
+        }
+        ListNode prev = null;
+        ListNode cur = root;
+        ListNode next;
+        
+        while(cur != null) {
+            next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
+        }
+        
+        return prev;
     }
 }
 ```
