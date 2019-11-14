@@ -3,6 +3,7 @@
     * [链表](#链表)
     * [栈](#栈)
     * [队列](#队列)
+    * [树](#树)
 # LeetCode题解 #
 
 ## 数据结构相关问题 ##
@@ -549,6 +550,105 @@ class Solution {
         }
 
         return result;
+    }
+}
+```
+
+### 树
+[144. 二叉树的前序遍历](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/submissions/)
+
+给定一个二叉树，返回它的 前序 遍历。
+
+```java
+class Solution {
+    private static List<Integer> result;
+
+    public List<Integer> preorderTraversal(TreeNode root) {
+        result = new ArrayList<>();
+        if(root == null) {
+            return result;
+        }
+        
+        preOrder(root);
+
+        return result;
+    }
+
+    // 递归
+    public void preOrder(TreeNode node) {
+        if(node != null) {
+            result.add(node.val);
+            preOrder(node.left);
+            preOrder(node.right);
+        }
+    }
+
+    // 非递归
+    public void preOrder(TreeNode node) {
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode currentNode = node;
+
+        while(currentNode != null || !stack.isEmpty()) {
+            while(currentNode != null) {
+                // 打印根节点
+                result.add(currentNode.val);
+                // 一直沿着左子树深度遍历
+                stack.push(currentNode);
+                currentNode = currentNode.left;
+            }
+
+            // 到这一步，说明当前栈顶元素的左子树为空，因为把当前节点置为当前栈顶元素的右子树
+            currentNode = stack.pop().right;
+        }
+    }
+}
+```
+
+[94. 二叉树的中序遍历](https://leetcode-cn.com/problems/binary-tree-inorder-traversal/submissions/)
+
+给定一个二叉树，返回它的中序 遍历。
+```java
+class Solution {
+    private List<Integer> result;
+    
+    public List<Integer> inorderTraversal(TreeNode root) {
+        result = new ArrayList<>();
+        if(root == null) {
+            return result;
+        }
+
+        inorder(root);
+
+        return result;
+    }
+    
+    // 递归
+    public void inorder(TreeNode root){
+        if(root != null){
+            inorder(root.left);
+            result.add(root.val);
+            inorder(root.right); 
+        }
+    }
+
+    // 非递归
+    public void inorder(TreeNode root){
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode currentNode = root;
+
+        while(currentNode != null || !stack.isEmpty()) {
+            while(currentNode != null) {
+                // 一直沿着左子树深度遍历
+                stack.push(currentNode);
+                currentNode = currentNode.left;
+            }
+            
+            // 到这一步，说明当前栈顶元素的左子树为空，打印当前栈顶元素
+            currentNode = stack.pop();
+            result.add(currentNode.val);
+            // 置为当前栈顶元素右节点
+            currentNode = currentNode.right;
+        }
     }
 }
 ```
