@@ -652,3 +652,58 @@ class Solution {
     }
 }
 ```
+
+[145. 二叉树的后序遍历](https://leetcode-cn.com/problems/binary-tree-postorder-traversal/)
+
+给定一个二叉树，返回它的 后序 遍历
+```java
+class Solution {
+    private static List<Integer> result;
+    public List<Integer> postorderTraversal(TreeNode root) {
+        result = new ArrayList<>();
+        if(root == null) {
+            return result;
+        }
+
+        postOrder(root);
+
+        return result;
+    }
+
+    // 递归
+    public void postOrder(TreeNode node) {
+        if(node != null) {
+            postOrder(node.left);
+            postOrder(node.right);
+            result.add(node.val);
+        }
+    }
+
+    // 非递归
+    public void postOrder(TreeNode node) {
+        Stack<TreeNode> stack = new Stack<>();
+        Stack<Integer> output = new Stack<>();
+
+        stack.push(node);
+
+        TreeNode currentNode;
+
+        while(!stack.isEmpty()) {
+            currentNode = stack.pop();
+            output.push(currentNode.val);
+
+            if(currentNode.left != null) {
+                stack.push(currentNode.left);
+            }
+
+            if(currentNode.right != null) {
+                stack.push(currentNode.right);
+            }
+        }
+
+        while(!output.isEmpty()) {
+            result.add(output.pop());
+        }
+    }
+}
+```
