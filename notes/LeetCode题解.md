@@ -3,6 +3,7 @@
     * [链表](#链表)
     * [栈](#栈)
     * [队列](#队列)
+    * [优先队列](#优先队列)
     * [树](#树)
 # LeetCode题解 #
 
@@ -547,6 +548,41 @@ class Solution {
             if(i  - k + 1 >= 0) {
                 result[i - k + 1] = nums[deque.peekFirst()];
             }
+        }
+
+        return result;
+    }
+}
+```
+
+### 优先队列
+[347. 前 K 个高频元素](https://leetcode-cn.com/problems/top-k-frequent-elements/)
+
+给定一个非空的整数数组，返回其中出现频率前 k 高的元素。
+```java
+class Solution {
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        // key = num, value = 出现次数
+        Map<Integer, Integer> count = new HashMap<>();
+
+        for(int i : nums) {
+            count.put(i, count.getOrDefault(i, 0) + 1);
+        }
+
+        // 定义比较规则
+        PriorityQueue<Integer> queue = new PriorityQueue<>((x, y) -> count.get(x) - count.get(y));
+
+        for(int key : count.keySet()) {
+            queue.offer(key);
+            if(queue.size() > k) {
+                queue.poll();
+            }
+        }
+
+        LinkedList<Integer> result = new LinkedList<>();
+
+        while(!queue.isEmpty()) {
+            result.addFirst(queue.poll());
         }
 
         return result;
