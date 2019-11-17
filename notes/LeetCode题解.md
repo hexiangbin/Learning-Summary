@@ -707,3 +707,35 @@ class Solution {
     }
 }
 ```
+
+[230. 二叉搜索树中第K小的元素](https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/)
+
+给定一个二叉搜索树，编写一个函数 kthSmallest 来查找其中第 k 个最小的元素。
+
+说明：
+你可以假设 k 总是有效的，1 ≤ k ≤ 二叉搜索树元素个数。
+
+```java
+class Solution {
+    private int res;
+    private int k;
+    public int kthSmallest(TreeNode root, int k) {
+        this.k = k;
+        // 中序遍历
+        inorder(root);
+        return res;
+    }
+    
+    private void inorder(TreeNode root){
+        if(root == null){
+            return;
+        }
+        
+        inorder(root.left);
+        if(--k == 0) {
+            res = root.val;
+        }
+        inorder(root.right);
+    }
+}
+```
