@@ -843,3 +843,48 @@ class Solution {
     }
 }
 ```
+
+[687. 最长同值路径](https://leetcode-cn.com/problems/longest-univalue-path/submissions/)
+
+给定一个二叉树，找到最长的路径，这个路径中的每个节点具有相同值。 这条路径可以经过也可以不经过根节点。
+
+```java
+class Solution {
+    int res = 0;
+    public int longestUnivaluePath(TreeNode root) {
+        helper(root);
+        return res;
+    }
+    // 最关键的是定义出递归函数，并了解该递归函数的意义
+    // 定义递归函数，表示该节点左右子树中，最长的同值路径
+    public int helper(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        
+        int left = helper(node.left);
+        int right = helper(node.right);
+        
+        if(node.left != null && node.left.val == node.val) {
+            // 和左子树相等，左子树路径+1
+            left++;
+        } else {
+            // 不相等置为0
+            left = 0;
+        }
+
+        
+        if(node.right != null && node.right.val == node.val) {
+            // 和右子树相等，右子树路径+1
+            right++;
+        } else {
+            // 不相等置为0
+            right = 0;
+        }
+
+        res = Math.max(res, left + right);
+
+        return Math.max(left, right);
+    }
+}
+```
