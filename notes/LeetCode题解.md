@@ -5,6 +5,9 @@
     * [队列](#队列)
     * [优先队列](#优先队列)
     * [树](#树)
+    
+* [常见算法](#常见算法)
+    * [递归](#递归)
 # LeetCode题解 #
 
 ## 数据结构相关问题 ##
@@ -552,6 +555,7 @@ class Solution {
 
         return result;
     }
+
 }
 ```
 
@@ -772,6 +776,70 @@ class Solution {
             res = root.val;
         }
         inorder(root.right);
+    }
+}
+```
+
+## 常见算法 ##
+
+### 递归 ###
+
+[91. 解码方法](https://leetcode-cn.com/problems/decode-ways/)
+
+一条包含字母 A-Z 的消息通过以下方式进行了编码：
+
+'A' -> 1
+'B' -> 2
+...
+'Z' -> 26
+给定一个只包含数字的非空字符串，请计算解码方法的总数。
+
+示例 1:
+
+输入: "12"
+输出: 2
+解释: 它可以解码为 "AB"（1 2）或者 "L"（12）。
+示例 2:
+
+输入: "226"
+输出: 3
+解释: 它可以解码为 "BZ" (2 26), "VF" (22 6), 或者 "BBF" (2 2 6) 。
+
+```java
+class Solution {
+    public int numDecodings(String s) {
+        if(s == null) {
+            return 0;
+        }
+
+        return decode(s, 0);
+    }
+
+    public int decode(String s, int index) {
+        if(index == s.length()) {
+            return 1;
+        }
+
+        if(s.charAt(index) == '0') {
+            // 如果当前数字是0，无法翻译,即无法单个翻译，也无法两个翻译
+            return 0;
+        }
+
+        // 只翻译一个数字 1~9
+        int d1 = decode(s, index + 1);
+        // 翻译两个数字 10~26
+        int d2 = 0;
+
+        if(index + 1 < s.length()) {
+            char c1 = s.charAt(index);
+            char c2 = s.charAt(index + 1);
+            // 两个数字范围 10 ～ 26 ,才可以翻译
+            if(c1 == '1' || (c1 == '2' && c2 <= '6')) {
+                d2 = decode(s, index + 2);
+            }
+        }
+
+        return d1 + d2;
     }
 }
 ```
