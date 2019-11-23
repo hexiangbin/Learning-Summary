@@ -8,6 +8,7 @@
     
 * [常见算法](#常见算法)
     * [递归](#递归)
+    * [回溯](*回溯)
 # LeetCode题解 #
 
 ## 数据结构相关问题 ##
@@ -885,6 +886,47 @@ class Solution {
         res = Math.max(res, left + right);
 
         return Math.max(left, right);
+    }
+}
+```
+
+### 回溯
+
+[39. 组合总和](https://leetcode-cn.com/problems/combination-sum/submissions/)
+
+给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+
+candidates 中的数字可以无限制重复被选取。
+
+说明：
+
+所有数字（包括 target）都是正整数。
+解集不能包含重复的组合。 
+
+```java
+class Solution {
+    List<List<Integer>> result = new ArrayList<>();
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        
+        backTrace(candidates, target, 0, new ArrayList<>());
+
+        return result;
+    }
+
+    public void backTrace(int[] candidates, int target, int index, List<Integer> temp) {
+        if (target < 0) {
+            return;
+        }
+
+        if (target == 0) {
+            result.add(new ArrayList<>(temp));
+        }
+
+        for(int i = index; i < candidates.length; i++) {
+            temp.add(candidates[i]);
+            backTrace(candidates, target - candidates[i], i, temp);
+            temp.remove(temp.size()-1);
+        }
     }
 }
 ```
