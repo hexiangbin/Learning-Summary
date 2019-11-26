@@ -8,7 +8,7 @@
     
 * [常见算法](#常见算法)
     * [递归](#递归)
-    * [回溯](*回溯)
+    * [回溯](#回溯)
 # LeetCode题解 #
 
 ## 数据结构相关问题 ##
@@ -927,6 +927,88 @@ class Solution {
             backTrace(candidates, target - candidates[i], i, temp);
             temp.remove(temp.size()-1);
         }
+    }
+}
+```
+
+[51.N皇后](https://leetcode-cn.com/problems/n-queens/)
+
+n 皇后问题研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+
+```java
+class Solution {
+    // 棋子的位置
+    int[] queen;
+    // 列的位置
+    int[] cols;
+    // 正对角线 (row - col + n) = 0 ~ n-1
+    int[] diagnols1;
+    // 负对角线 (row + col) = 0 ~ n-1
+    int[] diagnols2;
+    // 结果
+    List<List<String>> result = new ArrayList<>();
+
+    public List<List<String>> solveNQueens(int n) {
+        queen = new int[n];
+        cols = new int[n];
+        diagnols1 = new int[2 * n];
+        diagnols2 = new int[2 * n];
+
+        backTrace(n, 0);
+
+        return result;
+    }
+
+    public void backTrace(int n, int row) {
+        if(row == n) {
+            // 找到一种摆放方式
+            List<String> temp = new ArrayList<>();
+            for(int i = 0; i < n; i++) {
+                StringBuilder sb = new StringBuilder();
+                for(int j = 0; j < n; j++) {
+                    if(j == queen[i]) {
+                        sb.append("Q");
+                    } else {
+                        sb.append(".");
+                    }
+                }
+                temp.add(sb.toString());
+            }
+            result.add(temp);
+
+            return;
+        }
+
+        for(int col = 0; col < n; col++) {
+            if(!underAttack(n, row, col)) {
+                placeQueen(n, row, col);
+
+                // 继续放下一行
+                backTrace(n, row+1);
+
+                removeQueen(n, row, col);
+            }
+        }
+    }
+
+    // 放置棋子
+    public void placeQueen(int n, int row, int col) {
+        queen[row] = col;
+        cols[col] = 1;
+        diagnols1[row - col + n] = 1;
+        diagnols2[row + col] = 1;
+    }
+
+    // 移除棋子
+    public void removeQueen(int n, int row, int col) {
+        cols[col] = 0;
+        diagnols1[row - col + n] = 0;
+        diagnols2[row + col] = 0;
+    }
+
+    // 检查，列，正对角线，负对角线是否处于攻击位置
+    public boolean underAttack(int n, int row, int col) {
+        return cols[col] == 1 || diagnols1[row - col + n] == 1 || diagnols2[row + col] == 1;
     }
 }
 ```
