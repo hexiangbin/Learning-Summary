@@ -9,6 +9,7 @@
 * [常见算法](#常见算法)
     * [递归](#递归)
     * [回溯](#回溯)
+    * [深度优先](#深度优先)
 # LeetCode题解 #
 
 ## 数据结构相关问题 ##
@@ -1009,6 +1010,49 @@ class Solution {
     // 检查，列，正对角线，负对角线是否处于攻击位置
     public boolean underAttack(int n, int row, int col) {
         return cols[col] == 1 || diagnols1[row - col + n] == 1 || diagnols2[row + col] == 1;
+    }
+}
+```
+
+### 深度优先
+
+[98. 验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/submissions/)
+
+给定一个二叉树，判断其是否是一个有效的二叉搜索树。
+
+假设一个二叉搜索树具有如下特征：
+
+节点的左子树只包含小于当前节点的数。
+节点的右子树只包含大于当前节点的数。
+所有左子树和右子树自身必须也是二叉搜索树。
+
+```java
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        // 中序遍历
+        if(root == null) {
+            return true;
+        }
+
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode cur = root;
+        TreeNode pre = null;
+
+        while(cur != null || !stack.isEmpty()) {
+            while(cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+
+            cur = stack.pop();
+            if(pre != null && pre.val >= cur.val) {
+                return false;
+            }
+            pre = cur;
+            cur = cur.right;
+        }
+
+        return true;
     }
 }
 ```
