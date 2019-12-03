@@ -1056,3 +1056,49 @@ class Solution {
     }
 }
 ```
+
+[129. 求根到叶子节点数字之和](https://leetcode-cn.com/problems/sum-root-to-leaf-numbers/)
+
+给定一个二叉树，它的每个结点都存放一个 0-9 的数字，每条从根到叶子节点的路径都代表一个数字。
+
+例如，从根到叶子节点路径 1->2->3 代表数字 123。
+
+计算从根到叶子节点生成的所有数字之和。
+
+```java
+class Solution {
+    List<Integer> list = new ArrayList<>();
+    public int sumNumbers(TreeNode root) {
+        if(root == null) {
+            return 0;
+        }
+
+        dfs(root, 0);
+
+        int result = 0;
+
+        for(Integer i : list) {
+            result += i;
+        }
+
+        return result;
+    }
+
+    private void dfs(TreeNode node, Integer i) {
+        i = i * 10 + node.val;
+
+        if(node.left == null && node.right == null) {
+            list.add(i);
+            return;
+        }
+        
+        if(node.left != null) {
+            dfs(node.left, i);
+        }
+
+        if(node.right != null) {
+            dfs(node.right, i);
+        }
+    }
+}
+```
