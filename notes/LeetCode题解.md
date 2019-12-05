@@ -10,6 +10,7 @@
     * [递归](#递归)
     * [回溯](#回溯)
     * [深度优先](#深度优先)
+    * [广度优先](#广度优先)
 # LeetCode题解 #
 
 ## 数据结构相关问题 ##
@@ -1172,6 +1173,53 @@ class Solution {
         dfs(board, i+1, j, row, col);
         dfs(board, i, j-1, row, col);
         dfs(board, i, j+1, row, col);
+    }
+}
+```
+
+### 广度优先
+
+[102. 二叉树的层次遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/submissions/)
+
+给定一个二叉树，返回其按层次遍历的节点值。 （即逐层地，从左到右访问所有节点）。
+
+```java
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+
+        if (root == null) {
+            return result;
+        }
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        
+        List<Integer> temp = new ArrayList<>();
+
+        queue.offer(root);
+        int size = queue.size();
+
+        while (!queue.isEmpty()) {
+            TreeNode cur = queue.poll();
+            temp.add(cur.val);
+            size--;
+
+            if (cur.left != null) {
+                queue.offer(cur.left);
+            }
+
+            if (cur.right != null) {
+                queue.offer(cur.right);
+            }
+
+            if (size == 0) {
+                result.add(new ArrayList<>(temp));
+                temp.clear();
+                size = queue.size();
+            }
+        }
+
+        return result;
     }
 }
 ```
