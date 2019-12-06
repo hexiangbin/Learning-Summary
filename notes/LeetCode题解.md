@@ -11,6 +11,7 @@
     * [回溯](#回溯)
     * [深度优先](#深度优先)
     * [广度优先](#广度优先)
+    * [动态规划](#动态规划)
 # LeetCode题解 #
 
 ## 数据结构相关问题 ##
@@ -1221,5 +1222,89 @@ class Solution {
 
         return result;
     }
+}
+```
+
+### 动态规划
+
+[5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
+
+给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
+
+示例 1：
+
+输入: "babad"
+输出: "bab"
+注意: "aba" 也是一个有效答案。
+
+示例 2：
+
+输入: "cbbd"
+输出: "bb"
+
+```java
+class Solution {
+    public String longestPalindrome(String s) {
+        // 参考题解，动态规划 https://leetcode-cn.com/problems/longest-palindromic-substring/solution/zhong-xin-kuo-san-dong-tai-gui-hua-by-liweiwei1419/
+        
+        if (s == null || s.length() == 0) {
+            return s;
+        }
+
+        // 动态规划
+        // 定义状态 dp[i][j] 表示 i~j 之间的子串是否是回文串
+        // 定义状态转移方程 dp[i][j] = s[i]==s[j] && (j -i < 3 || dp[i+1][j-1])
+        // 关键在这里：[i + 1, j - 1] 一定至少有 2 个元素才有判断的必要
+        // 因为如果 [i + 1, j - 1] 只有一个元素，不用判断，一定是回文串
+        // 如果 [i + 1, j - 1] 表示的区间为空，不用判断，也一定是回文串
+        // [i + 1, j - 1] 一定至少有 2 个元素 等价于 (j - 1) - (i + 1) >= 1，即 j - i >=  3
+
+        int n = s.length();
+        boolean[][] dp = new boolean[n][n];
+
+        int max = 0;
+        String result = s.substring(0,1);
+
+        for (int j = 1; j < n; j++) {
+            for (int i = 0; i < j; i++) {
+                if (s.charAt(i) == s.charAt(j) && (j - i < 3 || dp[i+1][j-1])) {
+                    dp[i][j] = true;
+                    int length = j - i + 1;
+                    if (length > max) {
+                        max = length;
+                        result = s.substring(i,j+1);
+                    }
+                }
+            }
+        }
+
+        return result;
+
+    }
+
+    // public String longestPalindrome(String s) {
+    //     if (s == null || s.length() < 1) return "";
+    //     int start = 0, end = 0;
+    //     for (int i = 0; i < s.length(); i++) {
+    //         int len1 = expandAroundCenter(s, i, i);
+    //         int len2 = expandAroundCenter(s, i, i + 1);
+    //         int len = Math.max(len1, len2);
+    //         if (len > end - start) {
+    //             start = i - (len - 1) / 2;
+    //             end = i + len / 2;
+    //         }
+    //     }
+    //     return s.substring(start, end + 1);
+    // }
+
+    // private int expandAroundCenter(String s, int left, int right) {
+    //     int L = left, R = right;
+    //     while (L >= 0 && R < s.length() && s.charAt(L) == s.charAt(R)) {
+    //         L--;
+    //         R++;
+    //     }
+    //     return R - L - 1;
+    // }
+
 }
 ```
