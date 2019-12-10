@@ -1357,3 +1357,54 @@ class Solution {
     }
 }
 ```
+
+[72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/submissions/)
+
+给定两个单词 word1 和 word2，计算出将 word1 转换成 word2 所使用的最少操作数 。
+
+你可以对一个单词进行如下三种操作：
+
+插入一个字符
+删除一个字符
+替换一个字符
+
+```java
+class Solution {
+    public int minDistance(String word1, String word2) {
+        // 当我们在比较 str1(m) 和 str2(n) 的时候也会有两种结果，即 相等 或 不相等，如果说是 相等，那其实我们就不需要考虑这两个字符，问题就直接变成了子问题 str1(0…m-1) 通过多少 cost 变成 str2(0…n-1)，如果说 不相等，那我们就可以执行题目给定的三种变换策略:
+
+        // 将问题中的 str1 末尾字符 str1(m) 删除，因此只需要考虑子问题 str1(0…m-1)，str2(0…n)
+
+        // 将问题中的 str1 末尾字符 str1(m) 替换 成 str2(n)，这里我们就只需要考虑子问题 str1(0…m-1)，str2(0…n-1)
+
+        // 将问题中的 str1 末尾 添加 一个字符 str2(n)，添加后 str1(m+1) 必定等于 str2(n)，所以，我们就只需要考虑子问题 str1(0…m)，str2(0…n-1)
+        // dp[i][j] = word1.charAt(i) == word2.charAt(j) ? dp[i-1][j-1] : Math.min(dp[i-1][j], dp[i-1][j-1], dp[i][j-1]) + 1;
+    
+        int n1 = word1.length();
+        int n2 = word2.length();
+
+        int[][] dp = new int[n1+1][n2+1];
+
+        // 这里有一个初始化，就是当一个字符串是空串的时候，转化只能通过添加元素或是删除元素来达成，那这里状态数组中存的值其实是和非空字符串的字符数量保持一致。
+        for (int i = 0; i <= n1; i++) {
+            dp[i][0] = i;
+        }
+
+        for (int i = 0; i <= n2; i++) {
+            dp[0][i] = i;
+        }
+
+        for (int i = 1; i <= n1; i++) {
+            for (int j = 1; j <= n2; j++) {
+                if (word1.charAt(i-1) == word2.charAt(j-1)) {
+                    dp[i][j] = dp[i-1][j-1];
+                } else {
+                    dp[i][j] = Math.min(Math.min(dp[i-1][j], dp[i-1][j-1]), dp[i][j-1]) + 1;
+                }
+            }
+        }
+
+        return dp[n1][n2];
+    }
+}
+```
