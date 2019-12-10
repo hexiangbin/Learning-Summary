@@ -1308,3 +1308,52 @@ class Solution {
 
 }
 ```
+
+[1143. 最长公共子序列](https://leetcode-cn.com/problems/longest-common-subsequence/)
+
+给定两个字符串 text1 和 text2，返回这两个字符串的最长公共子序列。
+
+一个字符串的 子序列 是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。
+例如，"ace" 是 "abcde" 的子序列，但 "aec" 不是 "abcde" 的子序列。两个字符串的「公共子序列」是这两个字符串所共同拥有的子序列。
+
+若这两个字符串没有公共子序列，则返回 0。
+
+```java
+class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        // 参考 https://blog.csdn.net/kexuanxiu1163/article/details/103257938
+        // 我们要求解 str1(0,…m) 和 str2(0,…n) 的最长公共子序列，如果这是最终要求解的问题，那么它的子问题是什么呢？
+        // 其实是 str1(0,…m-1) 和 str2(0,…n-1)，以及 str1(0,…m-1) 和 str2(0,…n)，还有 str1(0,…m) 和 str2(0,…n-1)，
+        // 如果要找它们之间的关系，那我们需要思考一个问题，这些子问题怎么变成最终要求解的问题，当前的问题考虑当前字符是否相等，很直接的一个发现就是，
+        // 如果 str1(m)==str2(n)，那么我们就可以将子问题中的 str1(0,…m-1) 和 str2(0,…n-1) 后面添加两个相同字符递进成当前问题；
+        // 如果不相等，我们就需要考虑在三个子问题中选择一个较大值了。
+
+        // dp[i][j] 表示 str1(0,…i) 和 str2(0,…j) 的最长公共子序列长度
+
+        // 如果 str1(i) != str2(j):
+        // dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1])
+        // 如果 str1(i) == str2(j):
+        // dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1] + 1)
+        // 因为 dp[i - 1][j - 1] + 1 >= dp[i - 1][j] && dp[i - 1][j - 1] + 1 >= dp[i][j - 1]
+        // 所以第二项可以化简：
+        // 如果 str1(i) == str2(j):
+        // dp[i][j] = dp[i - 1][j - 1] + 1
+
+        // dp[i][j] = str1.charAt(i-1) == str2.charAt(j-1) ? dp[i-1][j-1] + 1 : Max(dp[i-1][j], dp[i][j-1])        
+
+        int n1 = text1.length();
+        int n2 = text2.length();
+
+        // 通常来说字符相关的问题可以把状态数组多开一格用来存放空串匹配的情况，这道题空串的情况答案都是 0，使用 Java 语言也不需要考虑初始化
+        int[][] dp = new int[n1 + 1][n2 + 1];
+
+        for (int i = 1; i <= n1; i++) {
+            for (int j =1; j <= n2; j++) {
+                dp[i][j] = text1.charAt(i-1) == text2.charAt(j-1) ? dp[i-1][j-1] + 1 : Math.max(dp[i-1][j], dp[i][j-1]);
+            }
+        }
+
+        return dp[n1][n2];
+    }
+}
+```
