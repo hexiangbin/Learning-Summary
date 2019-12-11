@@ -1371,6 +1371,7 @@ class Solution {
 ```java
 class Solution {
     public int minDistance(String word1, String word2) {
+        // 参考 https://blog.csdn.net/kexuanxiu1163/article/details/103257938
         // 当我们在比较 str1(m) 和 str2(n) 的时候也会有两种结果，即 相等 或 不相等，如果说是 相等，那其实我们就不需要考虑这两个字符，问题就直接变成了子问题 str1(0…m-1) 通过多少 cost 变成 str2(0…n-1)，如果说 不相等，那我们就可以执行题目给定的三种变换策略:
 
         // 将问题中的 str1 末尾字符 str1(m) 删除，因此只需要考虑子问题 str1(0…m-1)，str2(0…n)
@@ -1400,6 +1401,62 @@ class Solution {
                     dp[i][j] = dp[i-1][j-1];
                 } else {
                     dp[i][j] = Math.min(Math.min(dp[i-1][j], dp[i-1][j-1]), dp[i][j-1]) + 1;
+                }
+            }
+        }
+
+        return dp[n1][n2];
+    }
+}
+```
+
+(44. 通配符匹配)[https://leetcode-cn.com/problems/wildcard-matching/submissions/]
+
+给定一个字符串 (s) 和一个字符模式 (p) ，实现一个支持 '?' 和 '*' 的通配符匹配。
+
+'?' 可以匹配任何单个字符。
+'*' 可以匹配任意字符串（包括空字符串）。
+两个字符串完全匹配才算匹配成功。
+
+```java
+class Solution {
+    public boolean isMatch(String s, String p) {
+        // 参考 https://blog.csdn.net/kexuanxiu1163/article/details/103257938
+        // pattern(m) == str(n):问题拆解成看子问题 pattern(0...m-1) 和 str(0...n-1) 是否匹配
+        // pattern(m) == ?:问题拆解成看子问题 pattern(0...m-1) 和 str(0...n-1) 是否匹配
+        // pattern(m) == *:pattern(m) == *:可以匹配空串、以及任意多个字符
+        // 当 * 匹配空串时：问题拆解成看子问题 pattern(0…m-1) 和 str(0…n) 是否匹配
+        // 当 * 匹配任意字符时：问题拆解成看子问题 pattern(0…m) 和 str(0…n-1) 是否匹配
+        // 这里解释一下，匹配任意多个字符意味着之前的子问题也可以使用当前的，也就是用 pattern(m) 来进行匹配
+
+        // 所以得出递推公式
+        // pattern(i) == str(j) || pattern(j) == ? : dp[i][j] = dp[i-1][j-1]
+        // pattern(m) == * : dp[i][j] = dp[i-1][j] || dp[i][j-1]
+
+        // 初始化要注意 如果patten(i=0)为空，只有str为空才匹配 dp[0][0] = true
+        // 如果str(j=0)为空，只有patten所有字符都是*才匹配（因为*可以匹配空串），一旦有一个不是*，后面的都不会匹配
+        
+        int n1 = p.length();
+        int n2 = s.length();
+
+        boolean[][] dp = new boolean[n1+1][n2+1];
+        dp[0][0] = true;
+
+        for(int i = 1; i <= n1; i++) {
+            if (p.charAt(i-1) == '*') {
+                dp[i][0] = true;
+            } else {
+                break;
+            }
+        }
+
+        for (int i = 1; i <= n1; i++) {
+            for (int j = 1; j <= n2; j++) {
+                if (p.charAt(i-1) == s.charAt(j-1) || p.charAt(i-1) == '?') {
+                    dp[i][j] = dp[i-1][j-1];
+                }
+                if (p.charAt(i-1) == '*') {
+                    dp[i][j] = dp[i-1][j] || dp[i][j-1];
                 }
             }
         }
