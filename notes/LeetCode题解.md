@@ -1116,14 +1116,21 @@ class Solution {
 示例:
 
 X X X X
+
 X O O X
+
 X X O X
+
 X O X X
+
 运行你的函数后，矩阵变为：
 
 X X X X
+
 X X X X
+
 X X X X
+
 X O X X
 
 ```java
