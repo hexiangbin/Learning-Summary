@@ -13,6 +13,7 @@
     * [广度优先](#广度优先)
     * [动态规划](#动态规划)
         * [矩阵类](#矩阵类)
+        * [序列类](#序列类)
         * [字符串匹配类](#字符串匹配类)
 # LeetCode题解 #
 
@@ -1394,6 +1395,43 @@ class Solution {
 }
 ```
 
+###¥# 序列类
+
+[300. 最长上升子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/)
+
+给定一个无序的整数数组，找到其中最长上升子序列的长度。
+
+```java
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        // dp[i] 表示从0～i最长的子序列长度
+        // dp[i] = Math.max(dp[j]+1, dp[i]) j < i
+        // 其中dp[j]需要小于dp[i]
+
+        int n = nums.length;
+
+        int[] dp = new int[n];
+
+        Arrays.fill(dp, 1);
+
+        int max = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[j]+1, dp[i]);   
+                }
+            }
+            // 返回结果是所有dp[i]中最大的那个，但不一定是dp[n-1]
+            max = Math.max(max, dp[i]);
+        }
+
+        return max;
+    }
+}
+```
 
 #### 字符串匹配类
 
