@@ -1357,6 +1357,44 @@ class Solution {
 }
 ```
 
+[221. 最大正方形](https://leetcode-cn.com/problems/maximal-square/)
+
+在一个由 0 和 1 组成的二维矩阵内，找到只包含 1 的最大正方形，并返回其面积。
+
+```java
+class Solution {
+    public int maximalSquare(char[][] matrix) {
+        if (matrix == null || matrix.length == 0) {
+            return 0;
+        }
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int max = 0;
+
+        // flag(i,j) 表示的是由 1 组成的最大正方形的边长；
+        // 关键公式:flag(i, j)=min(flag(i−1, j), flag(i−1, j−1), flag(i, j−1))+1
+        int[][] flag = new int[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (i == 0 || j == 0) {
+                    flag[i][j] = matrix[i][j] == '1' ? 1 : 0;
+                    max = Math.max(max, flag[i][j]);
+                    continue;
+                }
+                if (matrix[i][j] == '1') {
+                    flag[i][j] = Math.min(Math.min(flag[i - 1][j], flag[i - 1][j - 1]), flag[i][j - 1]) + 1;
+                    max = Math.max(max, flag[i][j]);
+                }
+            }
+        }
+
+        return max * max;
+    }
+}
+```
+
+
 #### 字符串匹配类
 
 [5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
