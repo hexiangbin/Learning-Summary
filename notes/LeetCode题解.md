@@ -1395,7 +1395,38 @@ class Solution {
 }
 ```
 
-###¥# 序列类
+[120. 三角形最小路径和](https://leetcode-cn.com/problems/triangle/)
+
+给定一个三角形，找出自顶向下的最小路径和。每一步只能移动到下一行中相邻的结点上。
+
+```java
+class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int n = triangle.size();
+
+        // dp[i][j] 表示最后一行元素到[i][j]的最小路径和
+        // dp[i][j] = Math.max(dp[i+1][j], dp[i+1][j+1]) + triangle[i][j]
+        // 初始化i=n-1时 dp[i][j] = triangle[i][j];
+        int[][] dp = new int[n][n];
+
+        for (int j = 0; j < n; j++) {
+            List<Integer> list = triangle.get(n-1);
+            dp[n-1][j] = list.get(j);
+        }
+
+        for(int i = n-2; i >= 0; i--) {
+            List<Integer> list = triangle.get(i);
+            for(int j = 0; j < i+1; j++) {
+                dp[i][j] = Math.min(dp[i+1][j], dp[i+1][j+1]) + list.get(j);
+            }
+        }
+
+        return dp[0][0];
+    }
+}
+```
+
+#### 序列类
 
 [300. 最长上升子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/)
 
