@@ -787,6 +787,43 @@ class Solution {
 }
 ```
 
+[110. 平衡二叉树](https://leetcode-cn.com/problems/balanced-binary-tree/submissions/)
+
+给定一个二叉树，判断它是否是高度平衡的二叉树。
+
+本题中，一棵高度平衡二叉树定义为：
+
+一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过1。
+
+```java
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        return depth(root) != -1;
+    }
+
+    // dfs遍历
+    public int depth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        int left = depth(root.left);
+        if (left == -1) {
+            // 剪枝，避免多余计算
+            return -1;
+        }
+        int right = depth(root.right);
+        if (right == -1) {
+            // 剪枝，避免多余计算
+            return -1;
+        }
+
+        // 如果左右子树平衡，返回左右子树中最大的深度+1
+        return Math.abs(left - right) < 2 ? Math.max(left, right) + 1 : -1;
+    }
+}
+```
+
 ## 常见算法 ##
 
 ### 递归 ###
