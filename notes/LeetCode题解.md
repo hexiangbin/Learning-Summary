@@ -7,6 +7,7 @@
     * [树](#树)
     
 * [常见算法](#常见算法)
+    * [二分查找](#二分查找)
     * [递归](#递归)
     * [回溯](#回溯)
     * [深度优先](#深度优先)
@@ -825,6 +826,79 @@ class Solution {
 ```
 
 ## 常见算法 ##
+
+### 二分查找 ###
+[34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
+
+你的算法时间复杂度必须是 O(log n) 级别。
+
+如果数组中不存在目标值，返回 [-1, -1]。
+
+```java
+class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        int[] result = {findLowBound(nums, 0, nums.length-1, target), findHighBound(nums, 0, nums.length-1, target)};
+        return result;
+    }
+
+    private int findLowBound(int[] nums, int start, int end, int target) {
+        if (start > end) {
+            return -1;
+        }
+
+        while(start <= end) {
+            int mid = start + (end - start) / 2;
+
+            if (nums[mid] > target) {
+                end = mid - 1;
+            } else if (nums[mid] < target) {
+                start = mid + 1;
+            } else {
+                // 相等的情况下
+                if (mid == 0 || nums[mid-1] < target) {
+                    // 是数组中的第一位，或者前一位小于target
+                    return mid;
+                } else {
+                    // 否则上边界在左半区间
+                    end = mid - 1;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    private int findHighBound(int[] nums, int start, int end, int target) {
+        if (start > end) {
+            return -1;
+        }
+
+        while(start <= end) {
+            int mid = start + (end - start) / 2;
+
+            if (nums[mid] > target) {
+                end = mid - 1;
+            } else if (nums[mid] < target) {
+                start = mid + 1;
+            } else {
+                // 相等的情况下
+                if (mid == nums.length-1 || nums[mid+1] > target) {
+                    // 是数组中的最后一位，或者后一位大于target
+                    return mid;
+                } else {
+                    // 否则下边界在右半区间
+                    start = mid + 1;
+                }
+            }
+        }
+
+        return -1;
+    }
+}
+```
+
 
 ### 递归 ###
 
