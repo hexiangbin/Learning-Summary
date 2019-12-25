@@ -18,9 +18,9 @@ public class Sort {
 //        bubbleSort(nums);
 //        selectSort(nums);
 //        insertSort(nums);
-//        quickSort(nums);
+        quickSort(nums);
 //        mergeSort(nums);
-          heapSort(nums);
+//          heapSort(nums);
         System.out.println(Arrays.toString(nums));
     }
 
@@ -83,33 +83,51 @@ public class Sort {
         swap(nums, left, left + (int) (Math.random() * (right - left + 1)));
 
         // 三路快排，partition返回区间范围,[left, range[0]) < base, (rang[1], right) > base
-        int[] range = partition(nums, left, right);
-        quickSort(nums, left, range[0]-1);
-        quickSort(nums, range[1]+1, right);
+//        int[] range = partition(nums, left, right);
+//        quickSort(nums, left, range[0]-1);
+//        quickSort(nums, range[1]+1, right);
+        int partition = partition(nums, left, right);
+        quickSort(nums, left, partition-1);
+        quickSort(nums, partition+1, right);
     }
 
-    public static int[] partition(int[] nums, int left, int right) {
+//    public static int[] partition(int[] nums, int left, int right) {
+//        // 基准值
+//        int base = nums[left];
+//        // 定义区间[left, less] < base [more, right] > base
+//        int less = left;
+//        int more = right + 1;
+//        // 当前判断的值
+//        int cur = left + 1;
+//        while (cur < more) {
+//            if (nums[cur] > base) {
+//                // 注意，这里不是cur++, 因为交换后的值还需要进行判断
+//                swap(nums, cur, --more);
+//            } else if (nums[cur] < base) {
+//                swap(nums, cur++, ++less);
+//            } else {
+//                cur++;
+//            }
+//        }
+//        // less之前有过less++,所以这里直接交换left和less
+//        swap(nums, left, less);
+//
+//        return new int[]{less, more-1};
+//    }
+
+    public static int partition(int[] nums, int left, int right) {
         // 基准值
         int base = nums[left];
-        // 定义区间[left, less] < base [more, right] > base
+        // 定义区间[left, less] < base [less+2, right] > base
         int less = left;
-        int more = right + 1;
-        // 当前判断的值
-        int cur = left + 1;
-        while (cur < more) {
-            if (nums[cur] > base) {
-                // 注意，这里不是cur++, 因为交换后的值还需要进行判断
-                swap(nums, cur, --more);
-            } else if (nums[cur] < base) {
-                swap(nums, cur++, ++less);
-            } else {
-                cur++;
+
+        for (int i = left+1; i <= right; i++) {
+            if (nums[i] < base) {
+                swap(nums, i, ++less);
             }
         }
-        // less之前有过less++,所以这里直接交换left和less
         swap(nums, left, less);
-
-        return new int[]{less, more-1};
+        return less;
     }
 
     public static void mergeSort(int[] nums) {
