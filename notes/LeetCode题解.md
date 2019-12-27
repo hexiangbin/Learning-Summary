@@ -329,6 +329,45 @@ class Solution {
     }
 }
 ```
+
+[56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/submissions/)
+
+给出一个区间的集合，请合并所有重叠的区间。
+
+```java
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        if (intervals == null || intervals.length == 0) {
+            return intervals;
+        }
+
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+
+        List<int[]> result = new ArrayList<>();
+
+        int[] pre = intervals[0];
+        int[] cur = pre;
+
+        for (int i = 1; i < intervals.length; i++) {
+            cur = intervals[i];
+
+            if (cur[0] <= pre[1]) {
+                // 需要合并
+                pre[1] = Math.max(pre[1], cur[1]);
+            } else {
+                // 不需要合并
+                result.add(pre);
+                pre = cur;
+            }
+        }
+
+        result.add(pre);
+
+        return result.toArray(new int[result.size()][]);
+    }
+}
+```
+
 ### 字符串 ###
 
 [125. 验证回文串](https://leetcode-cn.com/problems/valid-palindrome/description/)
