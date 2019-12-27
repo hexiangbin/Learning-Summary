@@ -1,5 +1,6 @@
 * [数据结构相关问题](#数据结构相关问题)
-    * [数组与字符串](#数组与字符串)
+    * [数组字符串](#数组)
+    * [字符串](#字符串)
     * [链表](#链表)
     * [栈](#栈)
     * [队列](#队列)
@@ -20,7 +21,7 @@
 
 ## 数据结构相关问题 ##
 
-### 数组与字符串 ###
+### 数组 ###
 
 [283. 移动零](https://leetcode-cn.com/problems/move-zeroes/description/)
 
@@ -209,6 +210,127 @@ class Solution {
     }
 }
 ```
+
+[4. 寻找两个有序数组的中位数](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/submissions/)
+
+给定两个大小为 m 和 n 的有序数组 nums1 和 nums2。
+
+请你找出这两个有序数组的中位数，并且要求算法的时间复杂度为 O(log(m + n))。
+
+你可以假设 nums1 和 nums2 不会同时为空。
+
+```java
+class Solution {
+    // public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+    //     int[] nums = merge(nums1, nums2);
+        
+    //     int length = nums.length;
+        
+    //     if(length % 2 == 1) {
+    //         // 奇数
+    //         return nums[length/2];
+    //     } else{
+    //         return (double)(nums[length/2] + nums[length/2 -1]) / 2;
+    //     }
+        
+    // }
+    
+    // private int[] merge(int[] nums1, int[] nums2) {
+    //     int l1 = nums1.length;
+    //     int l2 = nums2.length;
+    //     int[] res = new int[l1+l2];
+        
+    //     if(l1 == 0) {
+    //         return nums2;
+    //     }
+        
+    //     if(l2 == 0) {
+    //         return nums1;
+    //     }
+        
+    //     int current1 = 0;
+    //     int current2 = 0;
+    //     int currentResult = 0;
+        
+    //     while(current1 < l1 && current2 < l2) {
+    //         if(nums1[current1] < nums2[current2]) {
+    //             res[currentResult++] = nums1[current1++];
+    //         } else{
+    //             res[currentResult++] = nums2[current2++];
+    //         }
+    //     }
+        
+    //     if(current1 == l1) {
+    //         while(current2 < l2) {
+    //             res[currentResult++] = nums2[current2++];
+    //         }
+    //     }
+        
+    //     if(current2 == l2) {
+    //         while(current1 < l1) {
+    //             res[currentResult++] = nums1[current1++];
+    //         }
+    //     }
+        
+    //     return res;
+    // }
+
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int[] num = new int[nums1.length + nums2.length];
+        for (int i = 0; i < nums1.length; i++) {
+            num[i] = nums1[i];
+        }
+        for (int i = nums1.length; i < nums1.length + nums2.length; i++) {
+            num[i] = nums2[i-nums1.length];
+        }
+        if (num.length % 2 == 1) {
+            return findK(num, 0, num.length - 1, num.length / 2);
+        } else {
+            return (findK(num, 0, num.length - 1, num.length / 2)
+                    + findK(num, 0, num.length - 1, num.length / 2 - 1)) / 2.0;
+        }
+    }
+
+    private static int findK(int[] num, int left, int right, int k) {
+        if (left > right) {
+            return -1;
+        }
+
+        int partition = partition(num, left, right);
+
+        if (partition == k) {
+            return num[partition];
+        } else if (partition > k) {
+            return findK(num, left, partition-1, k);
+        } else {
+            return findK(num, partition+1, right, k);
+        }
+    }
+
+    private static int partition(int[] num, int left, int right) {
+        int pivot = num[left];
+        int gt = left;
+
+        for (int i = left + 1; i <= right; i++) {
+            if (num[i] > pivot) {
+                swap(num, i, ++gt);
+            }
+        }
+
+        swap(num, left, gt);
+
+        return gt;
+    }
+
+    private static void swap(int[] num, int i, int j) {
+        int temp = num[i];
+        num[i] = num[j];
+        num[j] = temp;
+    }
+}
+```
+### 字符串 ###
+
 [125. 验证回文串](https://leetcode-cn.com/problems/valid-palindrome/description/)
 
 题目描述：给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。说明：本题中，我们将空字符串定义为有效的回文串。
