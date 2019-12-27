@@ -563,6 +563,59 @@ class Solution {
     }
 }
 ```
+
+[23. 合并K个排序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/submissions/)
+
+合并 k 个排序链表，返回合并后的排序链表
+
+```java
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0) {
+            return null;
+        }
+        return mergeKLists(lists, 0, lists.length-1);
+    }
+
+    public ListNode mergeKLists(ListNode[] lists, int start, int end) {
+        if (start == end) {
+            return lists[start];
+        }
+
+        int mid = start + (end - start) / 2;
+
+        return merge(mergeKLists(lists, start, mid), mergeKLists(lists, mid + 1, end));
+    }
+
+    public ListNode merge(ListNode node1, ListNode node2) {
+        if (node1 == null) {
+            return node2;
+        }
+        if (node2 == null) {
+            return node1;
+        }
+
+        ListNode virtualHead = new ListNode(Integer.MIN_VALUE);
+        ListNode temp = virtualHead;
+
+        while (node1 != null && node2 != null) {
+            if (node1.val < node2.val) {
+                temp.next = node1;
+                node1 = node1.next;
+            } else {
+                temp.next = node2;
+                node2 = node2.next;
+            }
+            temp = temp.next;
+        }
+
+        temp.next = node1 == null ? node2 : node1;
+
+        return virtualHead.next;
+    }
+}
+```
+
 ### 栈
 [20. 有效的括号](https://leetcode-cn.com/problems/valid-parentheses/)
 
