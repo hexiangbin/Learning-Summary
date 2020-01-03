@@ -368,6 +368,38 @@ class Solution {
 }
 ```
 
+[435. 无重叠区间](https://leetcode-cn.com/problems/non-overlapping-intervals/)
+
+给定一个区间的集合，找到需要移除区间的最小数量，使剩余区间互不重叠。
+
+```java
+class Solution {
+    public int eraseOverlapIntervals(int[][] intervals) {
+        // 贪婪法
+
+        // 按起始时间排序
+        Arrays.sort(intervals, (a,b) -> a[0] - b[0]);
+
+        int end = Integer.MIN_VALUE;
+        int count = 0;
+
+        for (int[] interval : intervals) {
+            if (interval[0] >= end) {
+                // 没有重叠
+                end = interval[1];
+            } else {
+                // 有重叠，选取截止时间靠前的
+                end = Math.min(end, interval[1]);
+                // 需要删除的个数+1
+                count++;
+            }
+        }
+
+        return count;
+    }
+}
+```
+
 ### 字符串 ###
 
 [125. 验证回文串](https://leetcode-cn.com/problems/valid-palindrome/description/)
