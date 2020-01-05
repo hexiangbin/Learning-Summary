@@ -757,6 +757,51 @@ class Solution {
     }
 }
 ```
+
+[84. 柱状图中最大的矩形](https://leetcode-cn.com/problems/largest-rectangle-in-histogram/)
+
+给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。
+
+求在该柱状图中，能够勾勒出来的矩形的最大面积。
+
+```java
+class Solution {
+    public static int largestRectangleArea(int[] heights) {
+        // 参考 https://leetcode-cn.com/problems/largest-rectangle-in-histogram/solution/084zhu-zhuang-tu-zhong-zui-da-de-ju-xing-by-6westb/
+        int n = heights.length;
+        int max = 0;
+        Stack<Integer> stack = new Stack<>();
+        // 这里先设定一个index=-1
+        stack.push(-1);
+
+        for (int i = 0; i < n; i++) {
+            // 当下一个元素小于栈顶元素
+            while (stack.peek() != -1 && heights[stack.peek()] > heights[i]) {
+                // 当前元素高度
+                int height = heights[stack.pop()];
+                // 右边小于当前元素的位置
+                int right = i;
+                // 左边小于当前元素的位置,如果没有就是-1
+                int left = stack.peek();
+                max = Math.max(max, height * (right -  left - 1));
+            }
+            stack.push(i);
+        }
+
+        while (stack.peek() != -1) {
+            // 遍历剩下的元素
+            int height = heights[stack.pop()];
+            // 右边小于当前元素的位置,此时的剩余元素右边小于当前元素的位置都是n,因为之前已经遍历完整个数组
+            int right = n;
+            // 左边小于当前元素的位置,如果没有就是-1
+            int left = stack.peek();
+            max = Math.max(max, height * (right -  left - 1));
+        }
+
+        return max;
+    }
+}
+```
 ### 队列
 [239. 滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)
 
