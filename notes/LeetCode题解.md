@@ -1,5 +1,6 @@
 * [数据结构相关问题](#数据结构相关问题)
-    * [数组字符串](#数组)
+    * [数组](#数组)
+    * [字符串](#字符串)
     * [字符串](#字符串)
     * [链表](#链表)
     * [栈](#栈)
@@ -400,6 +401,68 @@ class Solution {
 }
 ```
 
+[11. 盛最多水的容器](https://leetcode-cn.com/problems/container-with-most-water/description/)
+
+题目描述：给定 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+
+说明：你不能倾斜容器，且 n 的值至少为 2。
+<div align="center"> <img src="../pictures/question_11.jpg"/> </div><br>
+图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。
+
+示例:输入: [1,8,6,2,5,4,8,3,7] 输出: 49
+```java
+class Solution {
+    /*
+    最初我们考虑由最外围两条线段构成的区域。现在，为了使面积最大化，
+    我们需要考虑更长的两条线段之间的区域。如果我们试图将指向较长线段的指针向内侧移动，
+    矩形区域的面积将受限于较短的线段而不会获得任何增加。
+    但是，在同样的条件下，移动指向较短线段的指针尽管造成了矩形宽度的减小，但却可能会有助于面积的增大。
+    因为移动较短线段的指针会得到一条相对较长的线段，这可以克服由宽度减小而引起的面积减小
+     */
+    public int maxArea(int[] height) {
+        int left=0,right=height.length-1;
+        int maxArea=0;
+        while(left<right){
+            maxArea=Math.max(maxArea,(right-left)*Math.min(height[left],height[right]));
+            if(height[left]<height[right]){
+                left++;
+            }else {
+                right--;
+            }
+        }
+        return maxArea;
+    }
+}
+```
+[209. 长度最小的子数组](https://leetcode-cn.com/problems/minimum-size-subarray-sum/description/)
+
+题目描述：给定一个含有 n 个正整数的数组和一个正整数 s ，找出该数组中满足其和 ≥ s 的长度最小的连续子数组。如果不存在符合条件的连续子数组，返回 0。
+
+示例: 输入: s = 7, nums = [2,3,1,2,4,3] 输出: 2,解释: 子数组 [4,3] 是该条件下的长度最小的连续子数组。
+```java
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        assert (s>0 && nums!=null);
+        //滑动窗口
+        int left=0,right=-1;//nums[left....right]为滑动窗口
+        int sum=0;
+        int len=nums.length+1;
+        while(left<nums.length){
+            if(right+1<nums.length && sum<s)
+                sum+=nums[++right];
+            else //sum>=s
+                sum-=nums[left++];
+            
+            if(sum>=s)
+                len=Math.min(len,right-left+1);
+        }
+        if(len==nums.length+1)//无解
+            return 0;
+        return len;
+    }
+}
+```
+
 ### 字符串 ###
 
 [125. 验证回文串](https://leetcode-cn.com/problems/valid-palindrome/description/)
@@ -463,67 +526,7 @@ class Solution {
     }
 }
 ```
-[11. 盛最多水的容器](https://leetcode-cn.com/problems/container-with-most-water/description/)
 
-题目描述：给定 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
-
-说明：你不能倾斜容器，且 n 的值至少为 2。
-<div align="center"> <img src="../pictures/question_11.jpg"/> </div><br>
-图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。
-
-示例:输入: [1,8,6,2,5,4,8,3,7] 输出: 49
-```java
-class Solution {
-    /*
-    最初我们考虑由最外围两条线段构成的区域。现在，为了使面积最大化，
-    我们需要考虑更长的两条线段之间的区域。如果我们试图将指向较长线段的指针向内侧移动，
-    矩形区域的面积将受限于较短的线段而不会获得任何增加。
-    但是，在同样的条件下，移动指向较短线段的指针尽管造成了矩形宽度的减小，但却可能会有助于面积的增大。
-    因为移动较短线段的指针会得到一条相对较长的线段，这可以克服由宽度减小而引起的面积减小
-     */
-    public int maxArea(int[] height) {
-        int left=0,right=height.length-1;
-        int maxArea=0;
-        while(left<right){
-            maxArea=Math.max(maxArea,(right-left)*Math.min(height[left],height[right]));
-            if(height[left]<height[right]){
-                left++;
-            }else {
-                right--;
-            }
-        }
-        return maxArea;
-    }
-}
-```
-[209. 长度最小的子数组](https://leetcode-cn.com/problems/minimum-size-subarray-sum/description/)
-
-题目描述：给定一个含有 n 个正整数的数组和一个正整数 s ，找出该数组中满足其和 ≥ s 的长度最小的连续子数组。如果不存在符合条件的连续子数组，返回 0。
-
-示例: 输入: s = 7, nums = [2,3,1,2,4,3] 输出: 2,解释: 子数组 [4,3] 是该条件下的长度最小的连续子数组。
-```java
-class Solution {
-    public int minSubArrayLen(int s, int[] nums) {
-        assert (s>0 && nums!=null);
-        //滑动窗口
-        int left=0,right=-1;//nums[left....right]为滑动窗口
-        int sum=0;
-        int len=nums.length+1;
-        while(left<nums.length){
-            if(right+1<nums.length && sum<s)
-                sum+=nums[++right];
-            else //sum>=s
-                sum-=nums[left++];
-            
-            if(sum>=s)
-                len=Math.min(len,right-left+1);
-        }
-        if(len==nums.length+1)//无解
-            return 0;
-        return len;
-    }
-}
-```
 [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/description/)
 
 题目描述：给定一个字符串，找出不含有重复字符的最长子串的长度。
@@ -550,6 +553,45 @@ class Solution {
     }
 }
 ```
+
+[28. 实现 strStr()](https://leetcode-cn.com/problems/implement-strstr/)
+
+实现 strStr() 函数。
+
+给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。
+
+```java
+class Solution {
+    public int strStr(String haystack, String needle) {
+        int n = haystack.length();
+        int m = needle.length();
+
+        if (m == 0) {
+            return 0;
+        }
+
+        if (n < m) {
+            return -1;
+        }
+   
+        for (int i = 0; i <= n-m; i++) { 
+            int j = 0;
+            for (; j < m; j++) {
+                if (haystack.charAt(i+j) != needle.charAt(j)) {
+                    break;
+                }
+            }
+
+            if (j == m) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+}
+```
+
 ### 链表
 [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
 
