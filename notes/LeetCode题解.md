@@ -1248,12 +1248,12 @@ class Solution {
         if (nums == null || nums.length == 0) {
             return -1;
         }
-        int length = nums.length;
+
         int left = 0;
-        int right = length - 1;
+        int right = nums.length - 1;
 
 
-        while (left <= right) {
+        while (left + 1 < right) {
             int mid = left + (right - left) / 2;
 
             if (nums[mid] == target) {
@@ -1263,18 +1263,26 @@ class Solution {
             if (nums[mid] >= nums[left]) {
                 // 左有序
                 if (nums[left] <= target && target < nums[mid]) {
-                    right = mid - 1;
+                    right = mid;
                 } else {
-                    left = mid + 1;
+                    left = mid;
                 }
             } else {
                 // 右有序
                 if (nums[mid] < target && target <= nums[right]) {
-                    left = mid + 1;
+                    left = mid;
                 } else {
-                    right = mid - 1;
+                    right = mid;
                 }
             }
+        }
+
+        if (nums[left] == target) {
+            return left;
+        }
+
+        if (nums[right] == target) {
+            return right;
         }
 
         return -1;
