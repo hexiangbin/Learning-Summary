@@ -1290,6 +1290,52 @@ class Solution {
 
 }
 ```
+
+[153. 寻找旋转排序数组中的最小值](https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array/)
+
+假设按照升序排序的数组在预先未知的某个点上进行了旋转。
+
+( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
+
+请找出其中最小的元素。
+
+你可以假设数组中不存在重复元素。
+
+```java
+class Solution {
+    public int findMin(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+
+        if (nums.length == 1) {
+            return nums[0];
+        }
+
+        int left = 0;
+        int right = nums.length - 1;
+
+        // 如果数组本身有序，直接输出，数组有序的情况下后面的判断条件不成立
+        if (nums[left] < nums[right]) {
+            return nums[left];
+        }
+
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2;
+
+            if (nums[mid] > nums[left]) {
+                // mid > left 变化点在左侧
+                left = mid;
+            } else {
+                // 否则变化点在右侧
+                right = mid;
+            }
+        }
+
+        return Math.min(nums[left], nums[right]);
+    }
+}
+```
 ### 递归 ###
 
 [91. 解码方法](https://leetcode-cn.com/problems/decode-ways/)
