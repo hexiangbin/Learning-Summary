@@ -1205,6 +1205,52 @@ class Solution {
 }
 ```
 
+[104. 二叉树的最大深度](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/)
+
+给定一个二叉树，找出其最大深度。
+
+```java
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if(root == null){
+            return 0;
+        }
+        
+        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+    }
+}
+```
+
+[111. 二叉树的最小深度](https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/)
+
+给定一个二叉树，找出其最小深度。
+
+最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+
+```java
+class Solution {
+    // 注意题意 最小深度是从根节点到最近叶子节点（注意是叶子节点）的最短路径上的节点数量。
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        
+        if (root.left == null && root.right == null) {
+            // 叶子节点
+            return 1;
+        }
+
+        if (root.left == null || root.right == null) {
+            // 左右子节点中必有一个为空
+            return root.left == null ? minDepth(root.right) + 1 : minDepth(root.left) + 1;
+        }
+
+        // 左右节点都不为空
+        return Math.min(minDepth(root.left), minDepth(root.right)) + 1;
+    }
+}
+```
+
 ## 常见算法 ##
 
 ### 二分查找 ###
