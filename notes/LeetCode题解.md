@@ -1251,6 +1251,79 @@ class Solution {
 }
 ```
 
+[103. 二叉树的锯齿形层次遍历](https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/)
+
+给定一个二叉树，返回其节点值的锯齿形层次遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
+
+```java
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        LinkedList<Integer> temp = new LinkedList<>();
+        if (root == null) {
+            return res;
+        }
+        
+        Queue<TreeNode> queue = new LinkedList();
+        queue.offer(root);
+        int size = queue.size();
+        // level表示遍历层次，锯齿形遍历要求每次反转
+        int level = 0;
+
+        while (!queue.isEmpty()) {
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.poll();
+                if (level % 2 == 0) {
+                    temp.addLast(node.val);
+                } else {
+                    temp.addFirst(node.val);
+                }
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
+                }
+            }
+            res.add(new LinkedList<>(temp));
+            temp.clear();
+            level++;
+            size = queue.size();
+        }
+
+        return res;
+    }
+}
+```
+
+[236. 二叉树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/)
+
+给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+
+百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
+
+```java
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || root == p || root == q) {
+            // 找到对应节点，即返回对应节点，找不到返回null
+            return root;
+        }
+
+        // 如果left != null 说明左子树中存在目标节点
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        // 如果right != null 说明右子树中存在目标节点
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+        if (left != null && right != null) {
+            // 左右子树中都存在目标节点，已找到最短公共祖先
+            return root;
+        }
+
+        return left == null ? right : left;
+    }
+}
+```
 ## 常见算法 ##
 
 ### 二分查找 ###
