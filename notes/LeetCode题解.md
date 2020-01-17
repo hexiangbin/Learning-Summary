@@ -1324,6 +1324,69 @@ class Solution {
     }
 }
 ```
+
+[124. 二叉树中的最大路径和](https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/)
+
+给定一个非空二叉树，返回其最大路径和。
+
+本题中，路径被定义为一条从树中任意节点出发，达到任意节点的序列。该路径至少包含一个节点，且不一定经过根节点。
+
+```java
+class Solution {
+        private int max = Integer.MIN_VALUE;
+        public int maxPathSum(TreeNode root) {
+            maxPath(root);
+            return max;
+        }
+
+        public int maxPath(TreeNode node) {
+            if (node == null) {
+                return 0;
+            }
+
+            int left = Math.max(maxPath(node.left), 0);
+            int right = Math.max(maxPath(node.right), 0);
+            // 经过当前节点的最大路径
+            max = Math.max(max, left + right + node.val);
+
+            return node.val + Math.max(left, right);
+        }
+    }
+```
+
+[543. 二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/)
+
+给定一棵二叉树，你需要计算它的直径长度。一棵二叉树的直径长度是任意两个结点路径长度中的最大值。这条路径可能穿过根结点。
+
+```java
+class Solution {
+        private int max = Integer.MIN_VALUE;
+        public int diameterOfBinaryTree(TreeNode root) {
+            if (root == null) {
+                return 0;
+            }
+            helper(root);
+            // 路径数=节点数-1
+            return max - 1;
+        }
+
+        // 该函数表示经过该节点最长路径上的节点数
+        private int helper(TreeNode root) {
+            if (root == null) {
+                return 0;
+            }
+
+            int left = helper(root.left);
+            int right = helper(root.right);
+
+            max = Math.max(max, left + right + 1);
+
+            return Math.max(left, right) + 1;
+        }
+    }
+```
+
+
 ## 常见算法 ##
 
 ### 二分查找 ###
