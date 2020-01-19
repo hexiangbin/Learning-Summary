@@ -1386,6 +1386,48 @@ class Solution {
     }
 ```
 
+[105. 从前序与中序遍历序列构造二叉树](https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+
+根据一棵树的前序遍历与中序遍历构造二叉树。
+
+```java
+class Solution {
+    public TreeNode buildTree(int[] preOrder, int[] inOrder) {
+        if (preOrder == null || preOrder.length == 0 || inOrder == null || inOrder.length == 0) {
+            return null;
+        }
+
+        return buildTree(preOrder, 0, preOrder.length-1, inOrder, 0, inOrder.length-1);
+    }
+
+    public TreeNode buildTree(int[] preOrder, int preStart, int preEnd, int[] inOrder, int inStart, int inEnd) {
+        if (preStart > preEnd) {
+            return null;
+        }
+
+        TreeNode root = new TreeNode(preOrder[preStart]);
+        int index = findIndex(inOrder, root.val);
+        // 左子树长度
+        int leftLength = index - inStart;
+        // 右子树长度
+        int rightLength = inEnd - index;
+        root.left = buildTree(preOrder, preStart+1, preStart+index-inStart, inOrder, inStart, index-1);
+        root.right = buildTree(preOrder, preStart+index-inStart+1, preEnd, inOrder, index+1, inEnd);
+
+        return root;
+    }
+
+    public int findIndex (int[] nums, int goal) {
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == goal) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
+```
+
 
 ## 常见算法 ##
 
