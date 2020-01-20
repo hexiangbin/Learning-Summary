@@ -8,6 +8,26 @@ public class Tree {
         }
     }
 
+
+
+    public static void main(String[] args) {
+        Integer[] data = {-2147483648};
+
+        TreeNode root = formatTree(data);
+
+        System.out.println(new Tree().isValidBST(root));
+    }
+
+    private static TreeNode formatTree(Integer[] data) {
+        TreeNode[] nodes = new TreeNode[data.length];
+        for(int i=0; i<data.length; i++){
+            nodes[i] = data[i] == null ? null : new TreeNode(data[i]);
+        }
+        createTreeAsLevel(nodes);
+
+        return nodes[0];
+    }
+
     private static void createTreeAsLevel(TreeNode[] nodes){
         int n = nodes.length;
         int flag = 0;//按层构造时一个值为null，则它之后的孩子序号应该相应减2flag
@@ -22,40 +42,32 @@ public class Tree {
         System.out.println();
     }
 
-    public static void main(String[] args) {
-        Integer[] data = {1,2,2,3,3,null,null,4,4};
-        TreeNode[] nodes = new TreeNode[data.length];
-        for(int i=0; i<data.length; i++){
-            nodes[i] = data[i]==null ? null : new TreeNode(data[i].intValue());
-        }
-        createTreeAsLevel(nodes);
-        TreeNode root = nodes[0];
+    private boolean valid = true;
+    private Integer pre = null;
+    public boolean isValidBST(TreeNode root) {
+        inOrder(root);
 
-        System.out.println(new Tree().isBalanced(root));
+        return valid;
     }
 
-    public boolean isBalanced(TreeNode root) {
-        return depth(root) != -1;
-    }
-
-    // dfs遍历
-    public int depth(TreeNode root) {
-        if (root == null) {
-            return 0;
+    // 利用中序遍历本身有序的特点
+    public void inOrder(TreeNode root) {
+        if (!valid || root == null) {
+            return;
         }
 
-        int left = depth(root.left);
-        if (left == -1) {
-            // 剪枝，避免多余计算
-            return -1;
-        }
-        int right = depth(root.right);
-        if (right == -1) {
-            // 剪枝，避免多余计算
-            return -1;
+        inOrder(root.left);
+
+        if (valid) {
+            // 如果当前还是有效的继续判断
+            valid = pre == null ? true : root.val > pre;
+            pre = root.val;
+        } else {
+            // 如果已经失效直接返回
+            return;
         }
 
-        return Math.abs(left - right) < 2 ? Math.abs(left - right) + 1 : -1;
+        inOrder(root.right);
     }
 
 

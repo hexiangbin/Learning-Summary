@@ -164,17 +164,13 @@ public class Solution {
     }
     
     public int pop() {
-        int a;
         if(stack2.isEmpty()){
             while(!stack1.isEmpty()){
-                a=stack1.pop();
-                stack2.push(a);
-                
+                stack2.push(stack1.pop());
             }
         }
-    	a=stack2.pop();
      
-        return a;
+        return stack2.pop();
     }
 }
 ```
@@ -545,34 +541,26 @@ public class Solution {
 import java.util.Stack;
 
 public class Solution {
-	private static Stack<Integer> stack=new Stack<>();
-	private static Stack<Integer> minStack=new Stack<>();
-	
-	public static void push(Integer i){
-		stack.push(i);
-		if(minStack.size()==0 || i<minStack.peek()){
-			minStack.push(i);
-		}else{
-			minStack.push(minStack.peek());
-		}
-	}
-	
-	public static void pop(){
-		if(stack.size()>0 && minStack.size()>0){
-			stack.pop();
-			minStack.pop();
-		}else{
-			return;
-		}
-	}
-	
-	public static Integer min(){
-		if(stack.size()>0 && minStack.size()>0){
-			return minStack.peek();
-		}else{
-			return null;
-		}
-	}
+	private Stack<Integer> dataStack = new Stack<>();
+    private Stack<Integer> minStack = new Stack<>();
+
+    public void push(int node) {
+        dataStack.push(node);
+        minStack.push(minStack.isEmpty() ? node : Math.min(minStack.peek(), node));
+    }
+
+    public void pop() {
+        dataStack.pop();
+        minStack.pop();
+    }
+
+    public int top() {
+        return dataStack.peek();
+    }
+
+    public int min() {
+        return minStack.peek();
+    }
 }
 ```
 

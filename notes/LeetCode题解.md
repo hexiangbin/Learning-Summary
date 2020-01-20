@@ -479,24 +479,12 @@ import java.util.regex.Pattern;
 
 class Solution {
    public boolean isPalindrome(String s) {
-        if(s.isEmpty())
-            return true;
-       //将字符串进行匹配，保留数字和字母
-        String regEx="[^A-Za-z0-9]";
-        Pattern p=Pattern.compile(regEx);
-        Matcher m=p.matcher(s);
-        String input=m.replaceAll("").trim().toLowerCase();
-       //转化成char数组
-        char[] arr=input.toCharArray();
-        if(arr.length==1)
-            return true;
-       //对撞指针
-        int left=0,right=arr.length-1;
-        while(left<right){
-            if(arr[left]!=arr[right])
-                return false;
-            left++;
-            right--;
+        int i = 0, j = s.length() - 1;
+        while(i < j){
+            while(i < j && !Character.isLetterOrDigit(s.charAt(i))) i++;
+            while(i < j && !Character.isLetterOrDigit(s.charAt(j))) j--;
+            if(Character.toLowerCase(s.charAt(i)) != Character.toLowerCase(s.charAt(j))) return false;
+            i++; j--;
         }
         return true;
     }
@@ -1361,30 +1349,39 @@ class Solution {
 
 ```java
 class Solution {
-        private int max = Integer.MIN_VALUE;
-        public int diameterOfBinaryTree(TreeNode root) {
-            if (root == null) {
-                return 0;
-            }
-            helper(root);
-            // 路径数=节点数-1
-            return max - 1;
+    private int max = Integer.MIN_VALUE;
+    public int diameterOfBinaryTree(TreeNode root) {
+        if (root == null) {
+            return 0;
         }
 
-        // 该函数表示经过该节点最长路径上的节点数
-        private int helper(TreeNode root) {
-            if (root == null) {
-                return 0;
-            }
+        postOrder(root);
 
-            int left = helper(root.left);
-            int right = helper(root.right);
-
-            max = Math.max(max, left + right + 1);
-
-            return Math.max(left, right) + 1;
-        }
+        return max;
     }
+
+    // 该函数表示经过该节点最长路径上的路径数
+    private int postOrder(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        int left = postOrder(root.left);
+        int right = postOrder(root.right);
+
+        if (root.left != null) {
+            left++;
+        }
+
+        if (root.right != null) {
+            right++;
+        }
+
+        max = Math.max(max, left + right);
+
+        return Math.max(left, right);
+    }
+}
 ```
 
 [105. 从前序与中序遍历序列构造二叉树](https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
@@ -1609,7 +1606,7 @@ class Solution {
 }
 ```
 
-### 二分查找 ###
+### LRU算法 ###
 
 [146. LRU缓存机制](https://leetcode-cn.com/problems/lru-cache/)
 
@@ -1737,7 +1734,7 @@ class Solution {
 }
 ```
 
-[687. 最长同值路径](https://leetcode-cn.com/problems/longest-univalue-path/submissions/)
+[687. 最长同值路径](https://leetcode-cn.com/problems/longest-univalue-path/)
 
 给定一个二叉树，找到最长的路径，这个路径中的每个节点具有相同值。 这条路径可以经过也可以不经过根节点。
 
@@ -1745,18 +1742,19 @@ class Solution {
 class Solution {
     int res = 0;
     public int longestUnivaluePath(TreeNode root) {
-        helper(root);
+        postOrder(root);
         return res;
     }
+
     // 最关键的是定义出递归函数，并了解该递归函数的意义
     // 定义递归函数，表示该节点左右子树中，最长的同值路径
-    public int helper(TreeNode node) {
+    public int postOrder(TreeNode node) {
         if (node == null) {
             return 0;
         }
         
-        int left = helper(node.left);
-        int right = helper(node.right);
+        int left = postOrder(node.left);
+        int right = postOrder(node.right);
         
         if(node.left != null && node.left.val == node.val) {
             // 和左子树相等，左子树路径+1
@@ -1950,31 +1948,32 @@ class Solution {
 
 ```java
 class Solution {
+    private boolean valid = true;
+    private Integer pre = null;
     public boolean isValidBST(TreeNode root) {
-        // 中序遍历
-        if(root == null) {
-            return true;
+        inOrder(root);
+
+        return valid;
+    }
+
+    // 利用中序遍历本身有序的特点
+    public void inOrder(TreeNode root) {
+        if (!valid || root == null) {
+            return;
         }
 
-        Stack<TreeNode> stack = new Stack<>();
-        TreeNode cur = root;
-        TreeNode pre = null;
+        inOrder(root.left);
 
-        while(cur != null || !stack.isEmpty()) {
-            while(cur != null) {
-                stack.push(cur);
-                cur = cur.left;
-            }
-
-            cur = stack.pop();
-            if(pre != null && pre.val >= cur.val) {
-                return false;
-            }
-            pre = cur;
-            cur = cur.right;
+        if (valid) {
+            // 如果当前还是有效的继续判断
+            valid = pre == null || root.val > pre;
+            pre = root.val;
+        } else {
+            // 如果已经失效直接返回
+            return;
         }
 
-        return true;
+        inOrder(root.right);
     }
 }
 ```
